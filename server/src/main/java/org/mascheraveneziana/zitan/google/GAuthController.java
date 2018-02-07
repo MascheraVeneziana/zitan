@@ -9,6 +9,7 @@ import java.net.URL;
 
 import javax.management.RuntimeErrorException;
 
+import org.mascheraveneziana.zitan.domain.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,17 +21,19 @@ public class GAuthController {
 
     // TODO: パスの変更
     @RequestMapping("/home")
-    public void authenticate(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state,
+    public Object authenticate(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state,
             @RequestParam(name = "error", required = false) String error) throws IOException {
 
         if (error != null) {
 
             // TODO: send error
             System.out.println(error);
+            return "";
 
         } else if (!state.equals(GAuth.getInstance().getState())) {
 
             // TODO: send error
+            return "";
 
         } else {
             GoogleUser gUser = getGUser(code);
@@ -53,8 +56,14 @@ public class GAuthController {
                     newUser = new ObjectMapper().readValue(in, GoogleUser.class);
 
                 }
+                System.out.println(newUser.getSub());
                 System.out.println(newUser.getEmail());
                 System.out.println(newUser.getName());
+                User user = new User();
+                user.setName(newUser.getName());
+                return user;
+            } else {
+                throw new RuntimeErrorException(new Error(""));
             }
         }
     }

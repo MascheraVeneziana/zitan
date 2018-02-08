@@ -12,13 +12,13 @@ export class AppComponent implements OnInit {
   constructor(private appInfoService: AppInfoService, private titleService: Title) { }
 
   ngOnInit() {
-    this.appInfoService.getVersion().subscribe(appName => {
-      localStorage.setItem('appName', appName.text());
-      this.titleService.setTitle(appName.text());
-    },
-      error => {
-        console.log(error);
-      });
+    // this.appInfoService.getVersion().subscribe(appName => {
+    //   localStorage.setItem('appName', appName.text());
+    //   this.titleService.setTitle(appName.text());
+    // },
+    //   error => {
+    //     console.log(error);
+    //   });
   }
 
 }

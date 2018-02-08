@@ -1,1 +1,29 @@
-<app-navbar></app-navbar>
+<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark bg-indigo scrolling-navbar" [containerInside]="true">
+  <logo>
+    <a class="logo navbar-brand" href="#">
+      <strong>Zitan</strong>
+    </a>
+  </logo>
+  <links>
+    <form class="form-inline waves-light waves-light mr-auto" mdbRippleRadius>
+        <button type="button" class="btn btn-default waves-light" mdbRippleRadius>会議登録</button>
+    </form>
+    <div class="dropdown" dropdown>
+      <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle waves-light" mdbRippleRadius>
+        アカウント
+      </button>
+
+      <div class="dropdown-menu">
+        <h5 class="dropdown-header">木内太郎</h5>
+        <a class="dropdown-item" href="#">設定</a>
+        <a class="dropdown-item" href="#">ログアウト</a>
+      </div>
+    </div>
+  </links>
+</mdb-navbar>
+<!-- Main -->
+<main>
+  <div class="container" style="height:1300px;">
+    <app-dashboard></app-dashboard>
+  </div>
+</main>

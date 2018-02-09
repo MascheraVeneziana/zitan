@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.management.RuntimeErrorException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.mascheraveneziana.zitan.domain.User;
@@ -21,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class GoogleLoginController {
 
     @RequestMapping("/google-login")
-    public Object authenticate(HttpSession session,
+    public Object authenticate(HttpSession session, HttpServletRequest request, HttpServletResponse response,
             @RequestParam(name = "code") String code, @RequestParam(name = "state") String state,
             @RequestParam(name = "error", required = false) String error) throws IOException {
 
@@ -33,7 +35,7 @@ public class GoogleLoginController {
             System.out.println(error);
             return "";
 
-        } else if (!state.equals(GAuth.getInstance().getState())) {
+        } else if (!state.equals(GoogleInfo.getInstance().getState())) {
 
             // TODO: send error
             return "";
@@ -74,7 +76,7 @@ public class GoogleLoginController {
     }
 
     private GoogleUser getGUser(String code) throws IOException {
-        HttpURLConnection http = (HttpURLConnection) new URL(GAuth.GOOGLE_TOKEN_URL).openConnection();
+        HttpURLConnection http = (HttpURLConnection) new URL(GoogleInfo.GOOGLE_TOKEN_URL).openConnection();
         http.setRequestMethod("POST");
         http.setDoOutput(true);
 
@@ -82,7 +84,7 @@ public class GoogleLoginController {
             OutputStream out = http.getOutputStream();
             PrintStream ps = new PrintStream(out);
         ) {
-            ps.print(GAuth.getInstance().getEncodedTokenBody(code));
+            ps.print(GoogleInfo.getInstance().getEncodedTokenBody(code));
         }
         http.connect();
 

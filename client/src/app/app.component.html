@@ -1,26 +1,16 @@
-<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark bg-indigo scrolling-navbar" [containerInside]="true">
-  <logo>
-    <a class="logo navbar-brand" href="#">
-      <strong>Zitan</strong>
-    </a>
-  </logo>
-  <links>
-    <form class="form-inline waves-light waves-light mr-auto" mdbRippleRadius>
-        <button type="button" class="btn btn-default waves-light" mdbRippleRadius>会議登録</button>
-    </form>
-    <div class="dropdown" dropdown>
-      <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle waves-light" mdbRippleRadius>
-        アカウント
-      </button>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Zitan　　</span>
+    <button mat-raised-button color="accent" (click)="openDialog()">会議登録 <i class="fa fa-lg fa-plus"></i></button>
+    <span class="example-spacer"></span>
 
-      <div class="dropdown-menu">
-        <h5 class="dropdown-header">木内太郎</h5>
-        <a class="dropdown-item" href="#">設定</a>
-        <a class="dropdown-item" href="#">ログアウト</a>
-      </div>
-    </div>
-  </links>
-</mdb-navbar>
+    <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-lg fa-user"></i> 木内太郎</button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>設定</button>
+      <button mat-menu-item>ログアウト</button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
 <!-- Main -->
 <main>
   <div class="container" style="height:1300px;">

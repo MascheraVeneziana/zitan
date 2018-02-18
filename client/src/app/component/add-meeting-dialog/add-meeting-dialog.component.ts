@@ -17,7 +17,10 @@ export class AddMeetingDialogComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+      meetingNameCtrl: ['', Validators.required],
+      mtgDateCtrl: ['', Validators.required],
+      startTimeCtrl:  ['', Validators.required],
+      endTimeCtrl:  ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]

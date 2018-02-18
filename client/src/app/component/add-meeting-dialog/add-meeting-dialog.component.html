@@ -5,21 +5,21 @@
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>基本情報</ng-template>
         <mat-form-field>
-          <input matInput placeholder="会議名" formControlName="firstCtrl" required>
+          <input matInput placeholder="会議名" formControlName="meetingNameCtrl" required>
         </mat-form-field>
         <br />
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+      <input matInput [matDatepicker]="picker" placeholder="日付" formControlName="mtgDateCtrl">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
         <br />
         <mat-form-field>
-          <input matInput placeholder="開始時刻" type="time" formControlName="firstCtrl" required>
+          <input matInput placeholder="開始時刻" type="time" formControlName="startTimeCtrl" required>
         </mat-form-field>
         <br />
         <mat-form-field>
-          <input matInput placeholder="終了時刻" type="time" formControlName="firstCtrl" required>
+          <input matInput placeholder="終了時刻" type="time" formControlName="endTimeCtrl" required>
         </mat-form-field>
         <br />
         <div>

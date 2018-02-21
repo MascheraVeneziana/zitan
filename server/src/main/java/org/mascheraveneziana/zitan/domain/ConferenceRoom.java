@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(name="conference_room")
@@ -12,24 +15,8 @@ public class ConferenceRoom extends TimestampEntity{
 	
 	@Id
 	@GeneratedValue
+	@Getter @Setter
 	private Long id;
+	@Getter @Setter
 	private String name;
-	
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id=id;
-	}
-	
-	public String getname() {
-		return name;
-	}
-	public void setname(String name) {
-		this.name=name;
-	}
-	
-	
-	
 }

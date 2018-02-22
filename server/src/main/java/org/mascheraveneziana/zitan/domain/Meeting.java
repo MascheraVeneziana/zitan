@@ -1,6 +1,5 @@
 package org.mascheraveneziana.zitan.domain;
 
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +22,5 @@ public class Meeting extends TimestampEntity{
 	private String name;
 	@Getter @Setter
 	private String room;
-	@Getter @Setter
-	List<User> user;
 	
 }

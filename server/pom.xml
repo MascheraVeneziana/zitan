@@ -59,10 +59,10 @@
       <version>2.9.0</version>
     </dependency>
     <dependency>
-    		<groupId>org.projectlombok</groupId>
-    		<artifactId>lombok</artifactId>
-    		<scope>provide</scope>
-    	</dependency>
+   		<groupId>org.projectlombok</groupId>
+   		<artifactId>lombok</artifactId>
+   		<scope>provided</scope>
+   	</dependency>
   </dependencies>
 
 </project>

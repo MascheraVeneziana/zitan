@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>会議登録を行います</h1>
+<h1 mat-dialog-title>会議登録</h1>
 <div mat-dialog-content class="add-meeting-dialog-content">
   <mat-horizontal-stepper linear #stepper="matHorizontalStepper">
     <mat-step [stepControl]="firstFormGroup">
@@ -9,7 +9,11 @@
         </mat-form-field>
         <br />
         <mat-form-field>
-      <input matInput [matDatepicker]="picker" placeholder="日付" formControlName="mtgDateCtrl">
+          <input matInput placeholder="会議室" formControlName="meetingRoomCtrl" required>
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="日付" formControlName="mtgDateCtrl">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
@@ -23,28 +27,63 @@
         </mat-form-field>
         <br />
         <div>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperNext>次へ</button>
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
-      <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>メンバー登録</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="Address" formControlName="secondCtrl" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
+    <mat-step>
+      <ng-template matStepLabel>メンバー登録</ng-template>
+      <button mat-raised-button color="accent" (click)="openMemberAddDialog()">メンバー追加
+        <i class="fa fa-lg fa-plus"></i>
+      </button>
+      <br />
+      <br />
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 名前 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef> タイプ </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="reason">
+            <mat-header-cell *matHeaderCellDef> アサイン目的 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.reason}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <mat-header-cell *matHeaderCellDef> 編集 </mat-header-cell>
+            <mat-cell *matCellDef="let element" (click)="openMemberEditDialog(element.id)">
+              <i class="fa fa-edit"></i>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>戻る</button>
+        <button mat-button matStepperNext>次へ</button>
+      </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>確認</ng-template>
       You are now done.
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button matStepperPrevious>戻る</button>
+        <button mat-button (click)="stepper.reset()">リセット</button>
+        <button mat-button [disable]="!stepper.valid" (click)="onNoClick()">保存</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

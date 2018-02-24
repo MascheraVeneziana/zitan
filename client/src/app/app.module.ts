@@ -14,6 +14,9 @@ import {
   MatIconModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatSelectModule,
+  MatTableModule,
+  MatSortModule,
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -21,12 +24,14 @@ import { AppComponent } from './app.component';
 import { AppInfoService } from './service/app-info.service';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { AddMeetingDialogComponent } from './component/add-meeting-dialog/add-meeting-dialog.component';
+import { AddMemberDialogComponent } from './component/add-member-dialog/add-member-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    AddMeetingDialogComponent
+    AddMeetingDialogComponent,
+    AddMemberDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -43,13 +48,17 @@ import { AddMeetingDialogComponent } from './component/add-meeting-dialog/add-me
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
+    MatTableModule,
+    MatSortModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
   providers: [
     AppInfoService
   ],
   entryComponents: [
-    AddMeetingDialogComponent
+    AddMeetingDialogComponent,
+    AddMemberDialogComponent
   ],
   bootstrap: [AppComponent]
 })

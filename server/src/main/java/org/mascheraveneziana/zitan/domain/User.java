@@ -1,42 +1,46 @@
 package org.mascheraveneziana.zitan.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import lombok.Data;
+
+@Entity
+@Table(name="user")
+@Data
 public class User {
-
-    private int id;
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
+    private Long id;
+	
+	@Column(name = "name")
+	//Googleの名前サイズに合わせて60
+	@Size(max = 60)
     private String name;
-    private String password;
+	
+	@Column(name = "email")
+	//Googleのアドレスサイズに合わせて64
+	@Size(max = 64)
     private String email;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "meeting_id")
+	private Meeting meeting;
+	
+	public User() {
+	}
+	
+	public User(String name, String email) {
+		this.name = name;
+		this.email = email;
+	}
 
 }

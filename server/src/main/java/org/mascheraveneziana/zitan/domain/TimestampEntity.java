@@ -8,11 +8,13 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+
 @MappedSuperclass
 public abstract class TimestampEntity {
+	@Column(name = "update_time")
 	public Timestamp updateTime;
 	
-	@Column(updatable=false)
+	@Column(updatable = false, name = "created_time")
 	public Timestamp createdTime;
 	
 	@PrePersist

@@ -1,0 +1,22 @@
+<form [formGroup]="memberAddGroup">
+  <mat-form-field>
+    <input matInput placeholder="名前" formControlName="memberName" required>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="アサインタイプ" formControlName="memberType">
+      <mat-option [value]="memberType.want.value">
+        {{ memberType.want.string }}
+      </mat-option>
+      <mat-option [value]="memberType.must.value">
+        {{ memberType.must.string }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput placeholder="アサイン理由" formControlName="memberReason" required></textarea>
+  </mat-form-field>
+</form>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>キャンセル</button>
+  <button mat-button [disable]="!memberAddGroup.valid" (click)="closeDialog()">保存</button>
+</mat-dialog-actions>

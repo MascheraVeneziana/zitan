@@ -22,7 +22,7 @@ export class AddMeetingDialogComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<any>;
 
   constructor(
-    public dialogRef: MatDialogRef<AddMeetingDialogComponent>,
+    public dialogRef: MatDialogRef<AddMemberDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _formBuilder: FormBuilder,
     public memberAddDialog: MatDialog) {

@@ -36,11 +36,14 @@ export class AddMeetingDialogComponent implements OnInit {
       mtgDateCtrl: ['', Validators.required],
       startTimeCtrl: ['', Validators.required],
       endTimeCtrl: ['', Validators.required],
-      meetingRoomCtrl: ['', Validators.required]
+      meetingRoomCtrl: ['', Validators.required],
+      meetingAgenda: ['', Validators.required],
+      meetingGoal: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
+    this.firstFormGroup.controls.mtgDateCtrl.disable();
   }
 
   onNoClick(): void {
@@ -54,8 +57,10 @@ export class AddMeetingDialogComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.ELEMENT_DATA.push(result);
-      this.table.renderRows();
+      if (result) {
+        this.ELEMENT_DATA.push(result);
+        this.table.renderRows();
+      }
     });
   }
 

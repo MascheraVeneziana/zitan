@@ -12,10 +12,10 @@
           <input matInput placeholder="会議室" formControlName="meetingRoomCtrl" required>
         </mat-form-field>
         <br />
-        <mat-form-field>
+        <mat-form-field (click)="picker.open()">
           <input matInput [matDatepicker]="picker" placeholder="日付" formControlName="mtgDateCtrl">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #picker disabled="false"></mat-datepicker>
         </mat-form-field>
         <br />
         <mat-form-field>
@@ -26,7 +26,16 @@
           <input matInput placeholder="終了時刻" type="time" formControlName="endTimeCtrl" required>
         </mat-form-field>
         <br />
+        <mat-form-field>
+          <textarea matInput placeholder="概要" formControlName="meetingAgenda" required></textarea>
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+          <textarea matInput placeholder="ゴール" formControlName="meetingGoal" required></textarea>
+        </mat-form-field>
+        <br />
         <div>
+          <button mat-button mat-dialog-close>キャンセル</button>
           <button mat-button matStepperNext>次へ</button>
         </div>
       </form>
@@ -73,6 +82,7 @@
         </mat-table>
       </div>
       <div>
+        <button mat-button mat-dialog-close>キャンセル</button>
         <button mat-button matStepperPrevious>戻る</button>
         <button mat-button matStepperNext>次へ</button>
       </div>
@@ -81,6 +91,7 @@
       <ng-template matStepLabel>確認</ng-template>
       You are now done.
       <div>
+        <button mat-button mat-dialog-close>キャンセル</button>
         <button mat-button matStepperPrevious>戻る</button>
         <button mat-button (click)="stepper.reset()">リセット</button>
         <button mat-button [disable]="!stepper.valid" (click)="onNoClick()">保存</button>

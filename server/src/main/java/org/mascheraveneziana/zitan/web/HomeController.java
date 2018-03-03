@@ -29,7 +29,7 @@ public class HomeController {
     @Autowired
     ClientRegistrationRepository clientRegistrationRepository;
 
-    @GetMapping(path = "/")
+    @GetMapping(path = "/users/me")
     public User home(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient authorizedClient =
                 this.authorizedClientService.loadAuthorizedClient(

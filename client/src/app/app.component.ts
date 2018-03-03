@@ -1,3 +1,4 @@
+import { UserService } from './service/user.service';
 import { Component, OnInit } from '@angular/core';
 import { AppInfoService } from './service/app-info.service';
 import { Title } from '@angular/platform-browser';
@@ -11,31 +12,43 @@ import { AddMeetingDialogComponent } from './component/add-meeting-dialog/add-me
 })
 export class AppComponent implements OnInit {
 
-  animal: string;
-  name: string;
+  public userName: string;
 
-  constructor(private appInfoService: AppInfoService, private titleService: Title
-  , public dialog: MatDialog) { }
+  constructor(
+    private appInfoService: AppInfoService,
+    private userService: UserService,
+    private titleService: Title,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
-    // this.appInfoService.getVersion().subscribe(appName => {
-    //   localStorage.setItem('appName', appName.text());
-    //   this.titleService.setTitle(appName.text());
-    // },
-    //   error => {
-    //     console.log(error);
-    //   });
+    this.appInfoService.getVersion().subscribe(appName => {
+      localStorage.setItem('appName', appName['name'] + ' Ver' + appName['version']);
+      console.log(appName);
+
+      this.titleService.setTitle(appName['name'] + ' Ver' + appName['version']);
+    },
+      error => {
+        console.log(error);
+      });
+    this.userService.getByMe().subscribe(user => {
+      localStorage.setItem('userName', user['name']);
+      localStorage.setItem('userAddress', user['email']);
+      console.log(user);
+      this.userName = user['name'];
+    },
+      error => {
+        console.log(error);
+      });
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddMeetingDialogComponent, {
-      data: { name: this.name, animal: this.animal },
+      data: {  },
       disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
     });
   }
 

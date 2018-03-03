@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Headers, RequestOptions, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { User } from '../class/user';
 
@@ -7,7 +8,7 @@ import { User } from '../class/user';
 export class UserService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   getAll() {
     return this.http.get(this.apiUrl + '/users');

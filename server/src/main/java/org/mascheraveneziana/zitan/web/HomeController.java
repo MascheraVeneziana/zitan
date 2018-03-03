@@ -42,7 +42,7 @@ public class HomeController {
         PeopleService peopleService = new PeopleService.Builder(new NetHttpTransport(), new JacksonFactory(), credential).build();
         System.out.println(peopleService.getServicePath());
         try {
-            Person person = peopleService.people().get("people/me").setPersonFields("names,emailAddress").execute();
+            Person person = peopleService.people().get("people/me").setPersonFields("names,emailAddresses").execute();
             System.out.println(person.getNames());
         } catch (IOException e) {
             e.printStackTrace();

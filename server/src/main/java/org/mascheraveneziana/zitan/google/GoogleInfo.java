@@ -52,7 +52,7 @@ public class GoogleInfo {
         this.encodedAuthUrl = new StringBuffer().append(GOOGLE_AUTH_URL)
                 .append("?client_id=").append(URLEncoder.encode(clientId, "UTF-8"))
                 // TODO: リストで持って作成した方が見栄えはいい
-                .append("&scope=").append("openid+email+profile")
+                .append("&scope=").append("openid+email+profile+contacts.readonly")
                 .append("&response_type=code")
                 .append("&redirect_uri=").append(URLEncoder.encode(redirectUri, "UTF-8"))
                 .append("&state=").append(state)

@@ -7,7 +7,7 @@
     <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-lg fa-user"></i> {{userName}}</button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item>設定</button>
-      <button mat-menu-item>ログアウト</button>
+      <button mat-menu-item (click)="logout()">ログアウト</button>
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

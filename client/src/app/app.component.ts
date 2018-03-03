@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     private titleService: Title,
     public dialog: MatDialog) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.appInfoService.getVersion().subscribe(appName => {
       localStorage.setItem('appName', appName['name'] + ' Ver' + appName['version']);
       console.log(appName);
@@ -41,14 +41,21 @@ export class AppComponent implements OnInit {
       });
   }
 
-  openDialog(): void {
+  public openDialog(): void {
     const dialogRef = this.dialog.open(AddMeetingDialogComponent, {
-      data: {  },
+      data: {},
       disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      console.log(result);
+    });
+  }
+
+  public logout(): void {
+    this.appInfoService.sendLogout().subscribe(res => {
+    }, error => {
+      console.log(error);
     });
   }
 

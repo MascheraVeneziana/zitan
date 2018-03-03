@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
@@ -20,11 +21,13 @@ import {
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
-
-import { AppInfoService } from './service/app-info.service';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { AddMeetingDialogComponent } from './component/add-meeting-dialog/add-meeting-dialog.component';
 import { AddMemberDialogComponent } from './component/add-member-dialog/add-member-dialog.component';
+
+import { AppInfoService } from './service/app-info.service';
+import { UserService } from './service/user.service';
+import { MeetingService } from './service/meeting.service';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,7 @@ import { AddMemberDialogComponent } from './component/add-member-dialog/add-memb
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     MatToolbarModule,
@@ -54,7 +58,9 @@ import { AddMemberDialogComponent } from './component/add-member-dialog/add-memb
   ],
   schemas: [NO_ERRORS_SCHEMA],
   providers: [
-    AppInfoService
+    AppInfoService,
+    UserService,
+    MeetingService
   ],
   entryComponents: [
     AddMeetingDialogComponent,

@@ -4,10 +4,10 @@
     <button mat-raised-button color="accent" (click)="openDialog()">会議登録 <i class="fa fa-lg fa-plus"></i></button>
     <span class="example-spacer"></span>
 
-    <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-lg fa-user"></i> 木内太郎</button>
+    <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-lg fa-user"></i> {{userName}}</button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item>設定</button>
-      <button mat-menu-item>ログアウト</button>
+      <button mat-menu-item (click)="logout()">ログアウト</button>
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

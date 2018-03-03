@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Constants } from '../../class/constants';
 import { Member } from '../../class/member';
 import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog.component';
+import { Meeting } from '../../class/meeting';
 
 @Component({
   selector: 'app-add-meeting-dialog',
@@ -47,7 +48,13 @@ export class AddMeetingDialogComponent implements OnInit {
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    const mtg = new Meeting(0, this.firstFormGroup.controls.meetingNameCtrl.value,
+      this.firstFormGroup.controls.meetingRoomCtrl.value,
+      this.firstFormGroup.controls.mtgDateCtrl.value,
+      this.firstFormGroup.controls.startTimeCtrl.value,
+      this.firstFormGroup.controls.endTimeCtrl.value,
+      this.ELEMENT_DATA);
+    this.dialogRef.close(mtg);
   }
 
   openMemberAddDialog(): void {

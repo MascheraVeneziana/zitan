@@ -10,7 +10,7 @@ public class SystemController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String system() {
-        String str = "{ \"version\": \"1.0.0\" }";
+        String str = "{ \"name\": \"Zitan\", \"version\": \"1.0.0\" }";
         return str;
     }
 

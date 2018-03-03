@@ -12,7 +12,7 @@ import { Member } from '../../class/member';
 export class AddMemberDialogComponent implements OnInit {
 
   public memberAddGroup: FormGroup;
-  public memberType: Object;
+  public memberType;
   private editFlag: boolean;
   private editId: number;
 

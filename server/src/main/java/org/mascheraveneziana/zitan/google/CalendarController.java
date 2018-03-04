@@ -2,14 +2,13 @@ package org.mascheraveneziana.zitan.google;
 
 import java.io.IOException;
 import java.util.Date;
-import java.time.LocalDate;
+
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.mascheraveneziana.zitan.domain.Meeting;
+
 import org.mascheraveneziana.zitan.domain.User;
 import org.mascheraveneziana.zitan.dto.MeetingDTO;
-import org.mascheraveneziana.zitan.dto.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +37,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
 
-
-@RestController
+@Controller
 public class CalendarController {
 	private static final String APPLICATION_NAME = "zitan";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();

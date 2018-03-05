@@ -37,7 +37,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
 
-@Controller
+@RestController
 public class CalendarController {
 	private static final String APPLICATION_NAME = "zitan";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();

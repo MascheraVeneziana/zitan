@@ -14,6 +14,8 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
             .oauth2Login();
+        
+        http.csrf().disable();
     }
 
 }

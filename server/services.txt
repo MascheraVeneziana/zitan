@@ -1,0 +1,4 @@
+GET     /add                                            CalendarController.addEvent
+POST    /add                                            CalendarController.addEvent
+GET     /users/me                                       HomeController.home
+GET     /system                                         SystemController.system

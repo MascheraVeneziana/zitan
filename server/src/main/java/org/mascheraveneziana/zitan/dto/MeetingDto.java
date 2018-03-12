@@ -1,5 +1,7 @@
 package org.mascheraveneziana.zitan.dto;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -10,18 +12,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-public class MeetingDTO {
+public class MeetingDto {
 	
 	private String name;
 	private String room;
 	
 	@JsonFormat(pattern = "yyyy/MM/dd")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate date;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private Date date;
+	private Time startTime;
+	private Time endTime;
 	
-	public MeetingDTO (String name, String room, LocalDate date, LocalTime startTime, LocalTime endTime) {
+	public MeetingDto (String name, String room, Date date, Time startTime, Time endTime) {
 		this.name = name;
 		this.room = room;
 		this.date = date;
@@ -29,7 +31,7 @@ public class MeetingDTO {
 		this.endTime = endTime;
 	}
 	
-	public MeetingDTO () {}
+	public MeetingDto () {}
 	
 	
 	

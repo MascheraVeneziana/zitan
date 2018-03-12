@@ -8,7 +8,7 @@ import java.util.TimeZone;
 
 
 import org.mascheraveneziana.zitan.domain.User;
-import org.mascheraveneziana.zitan.dto.MeetingDTO;
+import org.mascheraveneziana.zitan.dto.MeetingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,33 +49,9 @@ public class CalendarController {
     ClientRegistrationRepository clientRegistrationRepository;
     
     //TODO:POSTの処理がうまくできないのでGetを使っている。POST完成したら削除する
-    @GetMapping("/add")
-    public void addEvent(OAuth2AuthenticationToken authentication) {
-    		try {
-			OAuth2AuthorizedClient authorizedClient = 
-					this.authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-			GoogleCredential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
-			client = new com.google.api.services.calendar.Calendar.Builder(
-					new NetHttpTransport(), JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
-			
-			System.out.println("aaaaaaaaaaaaa");
-			Map<String, Object> map = authentication.getPrincipal().getAttributes();
-	        User user = new User();
-	        user.setName((String) map.get("name"));
-	        user.setEmail((String) map.get("email"));
-	        addEvent(user.getEmail());
-		}catch (IOException e) {
-			System.err.println(e.getMessage());
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-    }
-    
-    
-    
-//	@PostMapping("/add")
-//	public ResponseEntity<String> addEvent(@RequestBody MeetingDTO meeting, OAuth2AuthenticationToken authentication) {
-//		try {
+//    @GetMapping("/add")
+//    public void addEvent(OAuth2AuthenticationToken authentication) {
+//    		try {
 //			OAuth2AuthorizedClient authorizedClient = 
 //					this.authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
 //			GoogleCredential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
@@ -93,17 +69,48 @@ public class CalendarController {
 //		} catch (Throwable t) {
 //			t.printStackTrace();
 //		}
-//		return new ResponseEntity<>(meeting.toString(), HttpStatus.OK);
-//	}
+//    }
+    
+    
+    
+	@PostMapping("/add")
+	public ResponseEntity<String> addEvent(@RequestBody MeetingDto meetingDto, OAuth2AuthenticationToken authentication) {
+		try {
+			OAuth2AuthorizedClient authorizedClient = 
+					this.authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+			GoogleCredential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
+			client = new com.google.api.services.calendar.Calendar.Builder(
+					new NetHttpTransport(), JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
+			
+			System.out.println("aaaaaaaaaaaaa");
+			Map<String, Object> map = authentication.getPrincipal().getAttributes();
+	        User user = new User();
+	        user.setName((String) map.get("name"));
+	        user.setEmail((String) map.get("email"));
+	        addEvent(user.getEmail(), meetingDto);
+		}catch (IOException e) {
+			System.err.println(e.getMessage());
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		return new ResponseEntity<>(meetingDto.toString(), HttpStatus.OK);
+	}
 	
 	private static CalendarList showCalendars() throws IOException {
 	    CalendarList feed = client.calendarList().list().execute();
 	    return feed;
 	  }
 	
-	private static void addEvent(String email) throws IOException {
-		Event event = newEvent();
-		client.events().insert(email, event).execute();
+	private static void addEvent(String emai, MeetingDto meetingDto) throws IOException {
+		Event event = new Event();
+	    event.setSummary(meetingDto.getName());
+	    Date startDate = new Date();
+	    Date endDate = new Date(startDate.getTime() + 3600000);
+	    DateTime start = new DateTime(startDate, TimeZone.getTimeZone("UTC"));
+	    event.setStart(new EventDateTime().setDateTime(start));
+	    DateTime end = new DateTime(endDate, TimeZone.getTimeZone("UTC"));
+	    event.setEnd(new EventDateTime().setDateTime(end));
+//		client.events().insert(email, event).execute();
 	}
 	
 	private static Event newEvent() {

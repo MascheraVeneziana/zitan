@@ -47,32 +47,7 @@ public class CalendarController {
     OAuth2AuthorizedClientService authorizedClientService;
     @Autowired
     ClientRegistrationRepository clientRegistrationRepository;
-    
-    //TODO:POSTの処理がうまくできないのでGetを使っている。POST完成したら削除する
-//    @GetMapping("/add")
-//    public void addEvent(OAuth2AuthenticationToken authentication) {
-//    		try {
-//			OAuth2AuthorizedClient authorizedClient = 
-//					this.authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-//			GoogleCredential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
-//			client = new com.google.api.services.calendar.Calendar.Builder(
-//					new NetHttpTransport(), JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
-//			
-//			System.out.println("aaaaaaaaaaaaa");
-//			Map<String, Object> map = authentication.getPrincipal().getAttributes();
-//	        User user = new User();
-//	        user.setName((String) map.get("name"));
-//	        user.setEmail((String) map.get("email"));
-//	        addEvent(user.getEmail());
-//		}catch (IOException e) {
-//			System.err.println(e.getMessage());
-//		} catch (Throwable t) {
-//			t.printStackTrace();
-//		}
-//    }
-    
-    
-    
+   
 	@PostMapping("/add")
 	public ResponseEntity<String> addEvent(@RequestBody MeetingDto meetingDto, OAuth2AuthenticationToken authentication) {
 		try {
@@ -82,7 +57,6 @@ public class CalendarController {
 			client = new com.google.api.services.calendar.Calendar.Builder(
 					new NetHttpTransport(), JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
 			
-			System.out.println("aaaaaaaaaaaaa");
 			Map<String, Object> map = authentication.getPrincipal().getAttributes();
 	        User user = new User();
 	        user.setName((String) map.get("name"));
@@ -96,21 +70,22 @@ public class CalendarController {
 		return new ResponseEntity<>(meetingDto.toString(), HttpStatus.OK);
 	}
 	
-	private static CalendarList showCalendars() throws IOException {
-	    CalendarList feed = client.calendarList().list().execute();
-	    return feed;
-	  }
+//	private static CalendarList showCalendars() throws IOException {
+//	    CalendarList feed = client.calendarList().list().execute();
+//	    return feed;
+//	  }
 	
-	private static void addEvent(String emai, MeetingDto meetingDto) throws IOException {
+	private static void addEvent(String email, MeetingDto meetingDto) throws IOException {
 		Event event = new Event();
 	    event.setSummary(meetingDto.getName());
-	    Date startDate = new Date();
-	    Date endDate = new Date(startDate.getTime() + 3600000);
-	    DateTime start = new DateTime(startDate, TimeZone.getTimeZone("UTC"));
+	    String str = meetingDto.getDate().toString() + "T";
+	    String utc = "+09:00";
+	    DateTime start = new DateTime(str + meetingDto.getStartTime().toString() + utc);
+	    
 	    event.setStart(new EventDateTime().setDateTime(start));
-	    DateTime end = new DateTime(endDate, TimeZone.getTimeZone("UTC"));
+	    DateTime end = new DateTime(str + meetingDto.getEndTime().toString() + utc);
 	    event.setEnd(new EventDateTime().setDateTime(end));
-//		client.events().insert(email, event).execute();
+		client.events().insert(email, event).execute();
 	}
 	
 	private static Event newEvent() {

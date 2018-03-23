@@ -81,6 +81,11 @@
       <artifactId>google-api-services-calendar</artifactId>
       <version>v3-rev296-1.23.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-admin-directory</artifactId>
+      <version>directory_v1-rev91-1.23.0</version>
+    </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

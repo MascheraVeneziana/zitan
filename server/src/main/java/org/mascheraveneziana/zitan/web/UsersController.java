@@ -40,6 +40,7 @@ public class UsersController {
                     // .setApplicationName("")
                     .build();
 
+            // https://developers.google.com/admin-sdk/directory/v1/reference/users/list
             Users googleUsers = directoryService.users().list()
                     .setDomain("unirita.co.jp")
                     .setMaxResults(500)
@@ -78,6 +79,7 @@ public class UsersController {
             PeopleService peopleService = new PeopleService.Builder(
                     new NetHttpTransport(), new JacksonFactory(), credential).build();
 
+            // https://developers.google.com/people/api/rest/v1/people/get
             Person person = peopleService.people().get("people/" + googleId)
                     .setPersonFields("names,emailAddresses")
                     .execute();

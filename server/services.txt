@@ -1,5 +1,8 @@
-GET     /add                                            CalendarController.addEvent
-POST    /add                                            CalendarController.addEvent
-GET     /users                                          UsersController.users
-GET     /users/me                                       UsersController.me
-GET     /system                                         SystemController.system
+GET     /add                  CalendarController.addEvent
+POST    /add                  CalendarController.addEvent
+GET     /users                UsersController.users           registered application users list
+GET     /users/google         UsersController.google          google users list (contains unregistered application users)
+GET     /users/me             UsersController.me              a registered application user
+GET     /users/me/google      UserController.googleMe         a google user
+POST    /users/new            UsersController.create          create a new user
+GET     /system               SystemController.system         system information

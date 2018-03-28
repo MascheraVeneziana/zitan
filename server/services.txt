@@ -1,5 +1,5 @@
 GET     /add                                            CalendarController.addEvent
 POST    /add                                            CalendarController.addEvent
-GET     /users                                          UserController.users
-GET     /users/me                                       HomeController.home
+GET     /users                                          UsersController.users
+GET     /users/me                                       UsersController.me
 GET     /system                                         SystemController.system

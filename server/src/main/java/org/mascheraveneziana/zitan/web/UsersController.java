@@ -1,7 +1,7 @@
 package org.mascheraveneziana.zitan.web;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mascheraveneziana.zitan.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,10 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.admin.directory.Directory;
 import com.google.api.services.admin.directory.model.Users;
+import com.google.api.services.people.v1.PeopleService;
+import com.google.api.services.people.v1.model.EmailAddress;
+import com.google.api.services.people.v1.model.Name;
+import com.google.api.services.people.v1.model.Person;
 
 @RestController
 public class UsersController {
@@ -27,31 +31,69 @@ public class UsersController {
     @GetMapping(path = "/users")
     public List<User> users(OAuth2AuthenticationToken authentication) throws Exception {
         try {
-            OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
-                    authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-            Credential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
+            OAuth2AuthorizedClient authorizedClient = authorizedClientService
+                    .loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+            Credential credential = new GoogleCredential()
+                    .setAccessToken(authorizedClient.getAccessToken().getTokenValue());
+
             Directory directoryService = new Directory.Builder(new NetHttpTransport(), new JacksonFactory(), credential)
-//                    .setApplicationName("")
+                    // .setApplicationName("")
                     .build();
+
             Users googleUsers = directoryService.users().list()
                     .setDomain("unirita.co.jp")
                     .setMaxResults(500)
                     .setOrderBy("email")
                     .setProjection("full")
-                    .setViewType("domain_public")
-                    .execute();
-            List<User> userList = new ArrayList<>();
-            for (com.google.api.services.admin.directory.model.User user : googleUsers.getUsers()) {
-                User zitanUser = new User();
-//                zitanUser.setId(Long.parseLong(user.getId()));
-                zitanUser.setName(user.getName().getFullName());
-                zitanUser.setEmail(user.getName().getFullName());
-                userList.add(zitanUser);
-            }
+                    .setViewType("domain_public").execute();
+
+            List<User> userList = googleUsers.getUsers()
+                    .stream().map(googleUser -> {
+                        User user = new User();
+//                        user.setId(googleUser.getId());
+                        user.setName(googleUser.getName().getFullName());
+                        user.setEmail(googleUser.getPrimaryEmail());
+                        return user;
+                    }).collect(Collectors.toList());
+
             System.out.println(userList.size());
             return userList;
         } catch (Exception e) {
             // TODO
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @GetMapping(path = "/users/me")
+    public User me(OAuth2AuthenticationToken authentication) throws Exception {
+        try {
+            String googleId = authentication.getPrincipal().getName();
+
+            OAuth2AuthorizedClient authorizedClient = authorizedClientService
+                    .loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+            Credential credential = new GoogleCredential()
+                    .setAccessToken(authorizedClient.getAccessToken().getTokenValue());
+
+            PeopleService peopleService = new PeopleService.Builder(
+                    new NetHttpTransport(), new JacksonFactory(), credential).build();
+
+            Person person = peopleService.people().get("people/" + googleId)
+                    .setPersonFields("names,emailAddresses")
+                    .execute();
+
+            Name googleName = person.getNames()
+                    .stream().filter(name -> name.getMetadata().getPrimary()).findFirst().get();
+            EmailAddress googleEmailAddress = person.getEmailAddresses()
+                    .stream().filter(emailAddress -> emailAddress.getMetadata().getPrimary()).findFirst().get();
+
+            User user = new User();
+            // TODO: GoogleのIDはlongの最大値を超過するので、String型にするか？
+//            user.setId(googleId);
+            user.setName(googleName.getDisplayName());
+            user.setEmail(googleEmailAddress.getValue());
+            return user;
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }

@@ -17,10 +17,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.admin.directory.Directory;
 import com.google.api.services.admin.directory.model.Users;
-import com.google.api.services.people.v1.PeopleService;
-import com.google.api.services.people.v1.model.EmailAddress;
-import com.google.api.services.people.v1.model.Name;
-import com.google.api.services.people.v1.model.Person;
 
 @RestController
 public class UsersController {
@@ -69,31 +65,26 @@ public class UsersController {
     @GetMapping(path = "/users/me")
     public User me(OAuth2AuthenticationToken authentication) throws Exception {
         try {
-            String googleId = authentication.getPrincipal().getName();
-
             OAuth2AuthorizedClient authorizedClient = authorizedClientService
                     .loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
             Credential credential = new GoogleCredential()
                     .setAccessToken(authorizedClient.getAccessToken().getTokenValue());
 
-            PeopleService peopleService = new PeopleService.Builder(
-                    new NetHttpTransport(), new JacksonFactory(), credential).build();
+            Directory directoryService = new Directory.Builder(new NetHttpTransport(), new JacksonFactory(), credential)
+                    // .setApplicationName("")
+                    .build();
 
-            // https://developers.google.com/people/api/rest/v1/people/get
-            Person person = peopleService.people().get("people/" + googleId)
-                    .setPersonFields("names,emailAddresses")
-                    .execute();
+            String googleId = authentication.getPrincipal().getName();
 
-            Name googleName = person.getNames()
-                    .stream().filter(name -> name.getMetadata().getPrimary()).findFirst().get();
-            EmailAddress googleEmailAddress = person.getEmailAddresses()
-                    .stream().filter(emailAddress -> emailAddress.getMetadata().getPrimary()).findFirst().get();
+            // https://developers.google.com/admin-sdk/directory/v1/reference/users/get
+            com.google.api.services.admin.directory.model.User googleUser =
+                    directoryService.users().get(googleId).setViewType("domain_public").execute();
 
             User user = new User();
             // TODO: GoogleのIDはlongの最大値を超過するので、String型にするか？
 //            user.setId(googleId);
-            user.setName(googleName.getDisplayName());
-            user.setEmail(googleEmailAddress.getValue());
+            user.setName(googleUser.getName().getFullName());
+            user.setEmail(googleUser.getPrimaryEmail());
             return user;
         } catch (Exception e) {
             e.printStackTrace();

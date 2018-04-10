@@ -38,7 +38,7 @@ import com.google.api.services.calendar.model.EventDateTime;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/meeting")
 public class CalendarController {
 	private static final String APPLICATION_NAME = "zitan";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();

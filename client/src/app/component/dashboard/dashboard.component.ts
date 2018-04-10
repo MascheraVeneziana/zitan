@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource, MatSort, MatTable } from '@angular/material';
 import { Constants } from '../../class/constants';
-import { Member } from '../../class/member';
+import { Meeting } from '../../class/meeting';
 import { Chart } from 'chart.js';
+import { MeetingService } from '../../service/meeting.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,21 +14,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   public memberType: Object;
   public displayedColumns = ['id', 'name', 'room', 'date', 'start', 'end', 'member', 'edit'];
-  public dataSource: MatTableDataSource<Member>;
+  public dataSource: MatTableDataSource<Meeting>;
   public ctx: CanvasRenderingContext2D;
-  public ELEMENT_DATA: Member[] = [];
+  public ELEMENT_DATA: Meeting[] = [];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild('mtgDateCanvas') mtgDateCanvas;
   @ViewChild('mtgCircleGraph') mtgCircleGraph;
   @ViewChild('mtgOvertimeCanvas') mtgOvertimeCanvas;
 
-  constructor() {
+  constructor(private meetingService: MeetingService) {
     this.memberType = Constants.memberType;
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
   }
 
   ngOnInit() {
+    this.meetingService.getAll().subscribe(meetings => {
+      console.log(meetings);
+      if (meetings instanceof Array) {
+        meetings.forEach(element => {
+          this.ELEMENT_DATA.push(element);
+        });
+      }
+    },
+      error => {
+        console.log(error);
+      });
+
   }
 
   ngAfterViewInit() {

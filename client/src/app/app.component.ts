@@ -4,6 +4,7 @@ import { AppInfoService } from './service/app-info.service';
 import { Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { AddMeetingDialogComponent } from './component/add-meeting-dialog/add-meeting-dialog.component';
+import { MeetingService } from './service/meeting.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
     private appInfoService: AppInfoService,
     private userService: UserService,
     private titleService: Title,
+    private meetingService: MeetingService,
     public dialog: MatDialog) { }
 
   public ngOnInit() {
@@ -49,6 +51,7 @@ export class AppComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
+      this.meetingService.create(result);
     });
   }
 

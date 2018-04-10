@@ -1,4 +1,4 @@
-package org.mascheraveneziana.zitan.web;
+package org.mascheraveneziana.zitan.web.v1;
 
 import java.io.IOException;
 import java.util.Date;
@@ -38,6 +38,7 @@ import com.google.api.services.calendar.model.EventDateTime;
 
 
 @RestController
+@RequestMapping("/api/v1")
 public class CalendarController {
 	private static final String APPLICATION_NAME = "zitan";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();

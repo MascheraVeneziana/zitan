@@ -16,7 +16,7 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .oauth2Login()
                 .and()
-            .logout();
+            .logout().logoutUrl("/api/v1/logout");
     }
 
 }

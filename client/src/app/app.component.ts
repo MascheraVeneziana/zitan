@@ -54,7 +54,9 @@ export class AppComponent implements OnInit {
 
   public logout(): void {
     this.appInfoService.sendLogout().subscribe(res => {
+      location.reload();
     }, error => {
+      location.reload();
       console.log(error);
     });
   }

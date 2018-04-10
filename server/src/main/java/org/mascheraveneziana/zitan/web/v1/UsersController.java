@@ -34,6 +34,9 @@ public class UsersController {
         try {
             String googleId = authentication.getPrincipal().getName();
             User user = userService.getUser(googleId);
+            if (user == null) {
+              return this.create(authentication);              
+            }
             return user;
         } catch (Exception e) {
             e.printStackTrace();

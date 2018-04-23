@@ -1,5 +1,12 @@
-GET     /add                  CalendarController.addEvent
 POST    /add                  CalendarController.addEvent
+ Example Data
+ {
+	"name":"test",
+	"room":"test",
+	"date":"2018/03/23",
+	"startTime":"09:12:00",
+	"endTime":"10:12:00"
+}
 GET     /users                UsersController.users           registered application users list
 GET     /users/google         UsersController.google          google users list (contains unregistered application users)
 GET     /users/me             UsersController.me              a registered application user

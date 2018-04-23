@@ -1,4 +1,5 @@
 POST    /add                  CalendarController.addEvent
+ TODO:今後メンバーを追加する
  Example Data
  {
 	"name":"test",

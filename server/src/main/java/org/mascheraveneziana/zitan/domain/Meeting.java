@@ -1,8 +1,7 @@
 package org.mascheraveneziana.zitan.domain;
 
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,6 +16,8 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import java.sql.Date;
+import java.sql.Time;
 
 @Entity
 @Table(name = "meeting")
@@ -41,13 +42,13 @@ public class Meeting extends TimestampEntity{
 	private String room;
 	
 	@Column(name = "date")
-	private LocalDate date;
+	private Date date;
 	
 	@Column(name = "start_time")
-	private LocalTime startTime;
+	private Time startTime;
 	
 	@Column(name = "end_time")
-	private LocalTime endTime;
+	private Time endTime;
 	
 	@OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<User> member;
@@ -56,7 +57,7 @@ public class Meeting extends TimestampEntity{
 		super();
 	}
 	
-	public Meeting(String name, String room, LocalDate date, LocalTime startTime, LocalTime endTime) {
+	public Meeting(String name, String room, Date date, Time startTime, Time endTime) {
 		super();
 		this.name = name;
 		this.room = room;

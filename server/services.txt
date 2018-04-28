@@ -8,9 +8,14 @@ POST    /add                  CalendarController.addEvent
 	"startTime":"09:12:00",
 	"endTime":"10:12:00"
 }
-GET     /users                UsersController.users           registered application users list
-GET     /users/google         UsersController.google          google users list (contains unregistered application users)
-GET     /users/me             UsersController.me              a registered application user
-GET     /users/me/google      UserController.googleMe         a google user
-POST    /users/new            UsersController.create          create a new user
-GET     /system               SystemController.system         system information
+GET     /api/v1/users                UsersController.users           registered application users list
+GET     /api/v1/users/me             UsersController.me              a registered application user
+POST    /api/v1/users/new            UsersController.create          create a new user
+{ id: _user_id_ }
+
+GET     /api/v1/system               SystemController.system         system information
+
+GET     /api/v1/provider/google/users                       get all-users's profile (id, full-name, email)
+GET     /api/v1/provider/google/users/me                    get end-user's profile (id, full-name, email)
+GET     /api/v1/provider/google/users/id/{id}               find google-user by id
+GET     /api/v1/provider/google/users/email/{email}         find google-user by email

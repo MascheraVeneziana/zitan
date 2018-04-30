@@ -12,6 +12,7 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
+                .antMatchers("/*", "/asetts/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .oauth2Login()

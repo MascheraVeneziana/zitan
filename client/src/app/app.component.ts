@@ -55,6 +55,10 @@ export class AppComponent implements OnInit {
     });
   }
 
+  public login(): void {
+    location.href = './oauth2/authorization/google';
+  }
+
   public logout(): void {
     this.appInfoService.sendLogout().subscribe(res => {
       location.reload();

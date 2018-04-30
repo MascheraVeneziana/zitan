@@ -1,8 +1,8 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <span>Zitan　　</span>
-    <button mat-raised-button color="accent"  *ngIf="!userName" (click)="login()">会議登録 <i class="fa fa-lg fa-plus"></i></button>
-    <button mat-raised-button color="accent" *ngIf="userName" (click)="openDialog()">会議登録 <i class="fa fa-lg fa-plus"></i></button>
+    <!-- <button mat-raised-button color="accent"  *ngIf="!userName" (click)="login()">会議登録 <i class="fa fa-lg fa-plus"></i></button> -->
+    <button mat-raised-button color="accent" (click)="openDialog()">会議登録 <i class="fa fa-lg fa-plus"></i></button>
     <span class="example-spacer"></span>
     <button mat-button *ngIf="!userName" (click)="login()">ログイン</button>
     <ng-container *ngIf="userName">
@@ -16,7 +16,7 @@
 </mat-toolbar>
 <!-- Main -->
 <main>
-  <div class="container" style="height:1300px;">
+  <div class="container">
     <app-dashboard></app-dashboard>
   </div>
 </main>

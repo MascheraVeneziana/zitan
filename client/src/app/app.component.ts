@@ -51,7 +51,11 @@ export class AppComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      this.meetingService.create(result);
+      this.meetingService.create(result).subscribe(res => {
+        console.log(res);
+      }, error => {
+        console.log(error);
+      });
     });
   }
 

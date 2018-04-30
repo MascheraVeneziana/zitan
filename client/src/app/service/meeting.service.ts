@@ -19,7 +19,7 @@ export class MeetingService {
   }
 
   create(meeting: Meeting) {
-    return this.http.post(this.apiUrl + '/meeting', meeting);
+    return this.http.post(this.apiUrl + '/meeting/add', meeting);
   }
 
   update(meeting: Meeting) {

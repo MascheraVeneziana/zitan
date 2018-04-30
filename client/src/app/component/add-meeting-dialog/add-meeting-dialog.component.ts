@@ -48,6 +48,8 @@ export class AddMeetingDialogComponent implements OnInit {
   }
 
   onNoClick(): void {
+    const bufTime = new Date(0);
+    bufTime.setHours(1, 1);
     const mtg = new Meeting(0, this.firstFormGroup.controls.meetingNameCtrl.value,
       this.firstFormGroup.controls.meetingRoomCtrl.value,
       this.firstFormGroup.controls.mtgDateCtrl.value,
@@ -78,8 +80,10 @@ export class AddMeetingDialogComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.ELEMENT_DATA[idx - 1] = result;
-      this.table.renderRows();
+      if (result) {
+        this.ELEMENT_DATA[idx - 1] = result;
+        this.table.renderRows();
+      }
     });
   }
 

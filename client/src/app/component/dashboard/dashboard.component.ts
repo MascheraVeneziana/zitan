@@ -44,12 +44,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const ctx = this.mtgDateCanvas.nativeElement;
-    this.drawDate(ctx);
-    const ctx2 = this.mtgCircleGraph.nativeElement;
-    this.drawCircle(ctx2);
-    const ctx3 = this.mtgOvertimeCanvas.nativeElement;
-    this.drawOvertime(ctx3);
+    // const ctx = this.mtgDateCanvas.nativeElement;
+    // this.drawDate(ctx);
+    // const ctx2 = this.mtgCircleGraph.nativeElement;
+    // this.drawCircle(ctx2);
+    // const ctx3 = this.mtgOvertimeCanvas.nativeElement;
+    // this.drawOvertime(ctx3);
   }
 
   drawDate(ctx) {

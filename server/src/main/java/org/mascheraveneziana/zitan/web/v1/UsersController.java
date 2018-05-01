@@ -2,8 +2,6 @@ package org.mascheraveneziana.zitan.web.v1;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.mascheraveneziana.zitan.ZitanException;
 import org.mascheraveneziana.zitan.domain.User;
 import org.mascheraveneziana.zitan.domain.provider.ProviderUser;

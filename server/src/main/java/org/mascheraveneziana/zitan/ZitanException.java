@@ -8,6 +8,11 @@ public class ZitanException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
+    public ZitanException(Throwable e, HttpStatus httpStatus) {
+        super(e);
+        this.httpStatus = httpStatus;
+    }
+
     public ZitanException(String msg, HttpStatus httpStatus) {
         super(msg);
         this.httpStatus= httpStatus;

@@ -100,7 +100,7 @@ public class UsersController {
     }
 
     @ExceptionHandler(ZitanException.class)
-    public ResponseEntity<String> handleZitanException(HttpServletRequest request, ZitanException e) {
+    public ResponseEntity<String> handleZitanException(ZitanException e) {
         return new ResponseEntity<String>(e.getMessage(), e.getHttpStatus());
     }
 

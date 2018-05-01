@@ -106,19 +106,26 @@ response: array
  * 以下調整中
  */
 ==========================================================================================================
-POST    /api/v1/provider/google/status                      check free (true) or busy (false)
+POST    /api/v1/provider/google/meeting/openable                      check openable meeting (true if user & resource is free)
 ==========================================================================================================
 request:
 {
   "minDate": "2018-06-01T07:00:00Z",          // UTC (-09:00:00)
   "maxDate": "2018-06-01T08:30:00Z",          // UTC (-09:00:00)
-  "ids": [ "user@mail_address", "resource@mail_address" ]
+  "accounts": [ {
+    "email": "user@gmail.address"
+  }, {
+    "email": "resource@gmail.address"
+  } ]
 }
 response:
-[ {
-  "id": "user@mail_address",
-  "status": true                              // free
-}, {
-  "id": "resource@mail_address",
-  "status": false                               // busy
-} ]
+{
+  "openable": false,
+  "accounts": [ {
+    "email": "user@gmail.address",
+    "free": true                              // openable is true if all users & resources is free
+  }, {
+    "email": "resource@gmail.address",
+    "free": false
+  } ]
+}

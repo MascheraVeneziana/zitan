@@ -20,7 +20,17 @@ response: array
 } ]
 
 =========================================================================================================
-GET     /api/v1/users/me             UsersController.me              a registered application user
+GET     /api/v1/users/me             UsersController.me              a application user (create if not exist)
+=========================================================================================================
+response:
+{
+  "id": "1234567890",
+  "name": "サンプルさん",
+  "email": "sample_san@gmail.com"
+}
+
+=========================================================================================================
+GET     /api/v1/users/id/{id}             UsersController.me              get a user by id (error if not exist)
 =========================================================================================================
 response:
 {
@@ -92,6 +102,9 @@ response: array
   "name": "R&D10FGinga"
 } ]
 
+/*
+ * 以下調整中
+ */
 ==========================================================================================================
 POST    /api/v1/provider/google/status                      check free (true) or busy (false)
 ==========================================================================================================
@@ -99,13 +112,13 @@ request:
 {
   "minDate": "2018-06-01T07:00:00Z",          // UTC (-09:00:00)
   "maxDate": "2018-06-01T08:30:00Z",          // UTC (-09:00:00)
-  "ids": [ "user_id", "resource_id" ]
+  "ids": [ "user@mail_address", "resource@mail_address" ]
 }
 response:
 [ {
-  "id": "user_id",
+  "id": "user@mail_address",
   "status": true                              // free
 }, {
-  "id": "resource_id",
-  status: false                               // busy
+  "id": "resource@mail_address",
+  "status": false                               // busy
 } ]

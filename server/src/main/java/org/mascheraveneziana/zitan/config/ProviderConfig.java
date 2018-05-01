@@ -1,23 +1,25 @@
 package org.mascheraveneziana.zitan.config;
 
-import org.mascheraveneziana.zitan.service.provider.ProviderResourceService;
-import org.mascheraveneziana.zitan.service.provider.ProviderUserService;
-import org.mascheraveneziana.zitan.service.provider.google.GoogleResourceService;
-import org.mascheraveneziana.zitan.service.provider.google.GoogleUserService;
+import org.mascheraveneziana.zitan.service.provider.ProviderAccountService;
+import org.mascheraveneziana.zitan.service.provider.ProviderStatusService;
+import org.mascheraveneziana.zitan.service.provider.google.GoogleAccountService;
+import org.mascheraveneziana.zitan.service.provider.google.GoogleStatusService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class ProviderConfig {
 
     @Bean
-    public ProviderUserService providerUserService() {
-      return new GoogleUserService();
+    @Primary
+    public ProviderAccountService providerAccountService() {
+      return new GoogleAccountService();
     }
-    
-    @Bean
-    public ProviderResourceService providerResourceService() {
-      return new GoogleResourceService();
+
+//    @Bean
+    public ProviderStatusService providerStatusService() {
+        return new GoogleStatusService();
     }
 
 }

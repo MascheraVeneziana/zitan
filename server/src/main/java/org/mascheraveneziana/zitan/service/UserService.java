@@ -14,12 +14,12 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public User getUser(String id) throws Exception {
+    public User getUser(String id) {
         Optional<User> userOptional = userRepository.findById(id);
         return userOptional.orElse(null);
     }
 
-    public List<User> getUsers() throws Exception {
+    public List<User> getUsers() {
         List<User> userList = userRepository.findAll();
         return userList;
     }

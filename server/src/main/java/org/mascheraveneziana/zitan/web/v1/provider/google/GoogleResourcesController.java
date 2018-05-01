@@ -3,8 +3,9 @@ package org.mascheraveneziana.zitan.web.v1.provider.google;
 import java.util.List;
 
 import org.mascheraveneziana.zitan.ZitanException;
-import org.mascheraveneziana.zitan.domain.provider.ProviderResource;
-import org.mascheraveneziana.zitan.service.provider.google.GoogleResourceService;
+import org.mascheraveneziana.zitan.domain.provider.ProviderAccount;
+import org.mascheraveneziana.zitan.service.provider.ProviderAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/provider/google/resources")
 public class GoogleResourcesController {
 
-    private GoogleResourceService resourceService = new GoogleResourceService();
+    @Autowired
+    private ProviderAccountService accountService;
 
-    @GetMapping()
-    public List<ProviderResource> resources(OAuth2AuthenticationToken authentication)
-            throws ZitanException {
+    @GetMapping
+    public List<ProviderAccount> resources(OAuth2AuthenticationToken authentication) {
 
-        List<ProviderResource> resources = resourceService.getResources(authentication);
+        List<ProviderAccount> resources = accountService.getResources(authentication);
         return resources;
     }
 

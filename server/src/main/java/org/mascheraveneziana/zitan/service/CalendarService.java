@@ -54,34 +54,10 @@ public class CalendarService {
     @Autowired
     ClientRegistrationRepository clientRegistrationRepository;
    
-//	public ResponseEntity<String> addEvent(@RequestBody MeetingDto meetingDto, OAuth2AuthenticationToken authentication) {
-//		try {
-//			OAuth2AuthorizedClient authorizedClient = 
-//					this.authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-//			GoogleCredential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
-//			client = new com.google.api.services.calendar.Calendar.Builder(
-//					new NetHttpTransport(), JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
-//			
-//			Map<String, Object> map = authentication.getPrincipal().getAttributes();
-//	        User user = new User();
-//	        user.setName((String) map.get("name"));
-//	        user.setEmail((String) map.get("email"));
-//	        addEvent(user.getEmail(), meetingDto);
-//		}catch (IOException e) {
-//			System.err.println(e.getMessage());
-//		} catch (Throwable t) {
-//			t.printStackTrace();
-//		}
-//		return new ResponseEntity<>(meetingDto.toString(), HttpStatus.OK);
-//	}
-	
-//	private static CalendarList showCalendars() throws IOException {
-//	    CalendarList feed = client.calendarList().list().execute();
-//	    return feed;
-//	  }
-	
+
 	public void addEvent(String email, MeetingDto meetingDto, com.google.api.services.calendar.Calendar client) throws IOException {
 		Event event = new Event();
+		Boolean canSend = true;
 	    event.setSummary(meetingDto.getName());
 	    String str = meetingDto.getDate().toString() + "T";
 	    String utc = "+09:00";
@@ -94,39 +70,23 @@ public class CalendarService {
 	    
 	    
 	    for(UserDto user : meetingDto.getUserList()) {
-	    	System.out.println(user.getEmail());
-	    	EventAttendee eventAttendee = new EventAttendee();
-	    	if(user.getEmail() == null) {
-	    		break;
-	    	}
-	    	eventAttendee.setEmail(user.getEmail());
-	    	//任意のやつ
-	    	eventAttendee.setOptional(true);
-	    	
-	    	eventAttendee.setSelf(true);
-	    	attendeeList.add(eventAttendee);
+	    		System.out.println(user.getEmail());
+	    		EventAttendee eventAttendee = new EventAttendee();
+		    	if(user.getEmail() == null) {
+		    		break;
+		    	}
+		    	eventAttendee.setEmail(user.getEmail());
+		    	//任意のやつ
+		    	eventAttendee.setOptional(meetingDto.getCanFree());
+		    	attendeeList.add(eventAttendee);
 	    }
 	    EventAttendee eventAttendee = new EventAttendee();
 	    eventAttendee.setEmail(meetingDto.getRoom());
 	    attendeeList.add(eventAttendee);
 	    
 	    event.setAttendees(attendeeList);
-		client.events().insert(email, event).execute();
+		client.events().insert(email, event).setSendNotifications(canSend).execute();
 	}
-	
-    public Directory getDirectoryService(String id) {
-        OAuth2AuthorizedClient authorizedClient =
-                authorizedClientService.loadAuthorizedClient("google", id);
-        Credential credential = new GoogleCredential()
-                .setAccessToken(authorizedClient.getAccessToken().getTokenValue());
-
-        Directory directoryService = new Directory.Builder(
-                new NetHttpTransport(), new JacksonFactory(), credential)
-                // TODO: read from properties file
-                // .setApplicationName("")
-                .build();
-        return directoryService;
-    }
 	
 	
 }

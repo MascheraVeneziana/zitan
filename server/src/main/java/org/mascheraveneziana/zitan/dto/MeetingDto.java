@@ -22,14 +22,20 @@ public class MeetingDto {
 	private Time startTime;
 	private Time endTime;
 	private List<UserDto> userList;
+	private 	String description;
+	private String goal;
+	private Boolean canFree;
 	
-	public MeetingDto (String name, String room, Date date, Time startTime, Time endTime, List<UserDto> userList) {
+	public MeetingDto (String name, String room, Date date, Time startTime, Time endTime, List<UserDto> userList, String description, String goal, Boolean canFree) {
 		this.name = name;
 		this.room = room;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.userList = userList; 
+		this.userList = userList;
+		this.description = description;
+		this.goal = goal;
+		this.canFree = canFree;
 	}
 	
 	public MeetingDto () {}

@@ -50,7 +50,7 @@ public class GoogleCalendarService implements ProviderCalendarService {
 
             FreeBusyRequest request = new FreeBusyRequest()
                     .setTimeMin(new DateTime(group.getTimeMin()))
-                    .setTimeMax(new DateTime(group.getTimeMin()))
+                    .setTimeMax(new DateTime(group.getTimeMax()))
                     .setItems(items);
 
             FreeBusyResponse response = calendarService.freebusy().query(request).execute();
@@ -61,7 +61,7 @@ public class GoogleCalendarService implements ProviderCalendarService {
                 FreeBusyCalendar calendar = calendars.get(account.getEmail());
                 GoogleAccount googleAccount = new GoogleAccount();
                 googleAccount.setEmail(account.getEmail());
-                googleAccount.setFree(calendar.size() == 0);
+                googleAccount.setFree(calendar.getBusy().size() == 0);
                 return googleAccount;
             }).collect(Collectors.toList());
 

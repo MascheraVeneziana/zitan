@@ -61,6 +61,10 @@ public class Meeting extends TimestampEntity{
 	@Size(max = 1000)
 	private String goal;
 
+	@Column(name = "provider_event_id")
+	@Size(max = 30)
+	private String providerEventId;
+
 	public Meeting() {
 		super();
 	}

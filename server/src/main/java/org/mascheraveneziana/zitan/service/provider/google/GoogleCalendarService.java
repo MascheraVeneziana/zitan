@@ -11,6 +11,7 @@ import org.mascheraveneziana.zitan.domain.provider.ProviderMeetingGroup;
 import org.mascheraveneziana.zitan.domain.provider.google.GoogleAccount;
 import org.mascheraveneziana.zitan.domain.provider.google.GoogleMeetingGroup;
 import org.mascheraveneziana.zitan.service.SystemService;
+import org.mascheraveneziana.zitan.service.provider.ProviderAccountService;
 import org.mascheraveneziana.zitan.service.provider.ProviderCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
@@ -37,8 +39,61 @@ public class GoogleCalendarService implements ProviderCalendarService {
     private OAuth2AuthorizedClientService authorizedClientService;
 
     @Autowired
+    private ProviderAccountService accountService;
+
+    @Autowired
     private SystemService systemService;
 
+    public Event getEventById(OAuth2AuthenticationToken authentication, String eventId) {
+        try {
+            Calendar calendarService = getCalendarService(authentication);
+            Event event = calendarService.events().get("primary", eventId).execute();
+            return event;
+        } catch (IOException e) {
+            throw new ZitanException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public Event create(OAuth2AuthenticationToken authentication, Event event) {
+        try {
+            String id = authentication.getPrincipal().getName();
+            ProviderAccount account = accountService.getUserById(authentication, id);
+
+            Calendar calendarService = getCalendarService(authentication);
+
+            // https://developers.google.com/calendar/v3/reference/events/insert
+            Event created = calendarService.events().insert(account.getEmail(), event)
+                    .setSendNotifications(true).execute();
+            return created;
+        } catch (IOException e) {
+            throw new ZitanException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public Event update(OAuth2AuthenticationToken authentication, Event event) {
+        try {
+            Calendar calendarService = getCalendarService(authentication);
+
+            // https://developers.google.com/calendar/v3/reference/events/update
+            Event updated = calendarService.events().update("primary", event.getId(), event).execute();
+            return updated;
+        } catch (IOException e) {
+            throw new ZitanException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void delete(OAuth2AuthenticationToken authentication, String eventId) {
+        try {
+            Calendar calendarService = getCalendarService(authentication);
+
+            // https://developers.google.com/calendar/v3/reference/events/delete
+            calendarService.events().delete("primary", eventId);
+        } catch (IOException e) {
+            throw new ZitanException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // TODO: もっと適切な名前は？
     @Override
     public ProviderMeetingGroup getStatus(OAuth2AuthenticationToken authentication, ProviderMeetingGroup group) {
         try {
@@ -53,6 +108,7 @@ public class GoogleCalendarService implements ProviderCalendarService {
                     .setTimeMax(new DateTime(group.getTimeMax()))
                     .setItems(items);
 
+            // https://developers.google.com/calendar/v3/reference/freebusy/query
             FreeBusyResponse response = calendarService.freebusy().query(request).execute();
 
             Map<String, FreeBusyCalendar> calendars = response.getCalendars();

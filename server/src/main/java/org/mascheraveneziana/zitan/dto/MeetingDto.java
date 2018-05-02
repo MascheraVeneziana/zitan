@@ -12,10 +12,11 @@ import lombok.Data;
 
 @Data
 public class MeetingDto {
-	
+
+    private Long id;
 	private String name;
 	private String room;
-	
+
 	@JsonFormat(pattern = "yyyy/MM/dd")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private Date date;
@@ -25,9 +26,10 @@ public class MeetingDto {
 	private 	String description;
 	private String goal;
 	private Boolean canFree;
-	
-	public MeetingDto (String name, String room, Date date, Time startTime, Time endTime, List<UserDto> userList, String description, String goal, Boolean canFree) {
-		this.name = name;
+
+	public MeetingDto (Long id, String name, String room, Date date, Time startTime, Time endTime, List<UserDto> userList, String description, String goal, Boolean canFree) {
+	    this.id = id;
+	    this.name = name;
 		this.room = room;
 		this.date = date;
 		this.startTime = startTime;
@@ -37,9 +39,9 @@ public class MeetingDto {
 		this.goal = goal;
 		this.canFree = canFree;
 	}
-	
+
 	public MeetingDto () {}
-	
-	
-	
+
+
+
 }

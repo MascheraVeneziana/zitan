@@ -44,9 +44,9 @@ public class MeetingController {
     CalendarService calendarService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Meeting> getMeetings() {
-        List<Meeting> meetings = calendarService.getMeetings();
-        return meetings;
+    public List<MeetingDto> getMeetingDtoList() {
+        List<MeetingDto> meetingDtoList = calendarService.getMeetingDtoList();
+        return meetingDtoList;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/add")
@@ -68,21 +68,20 @@ public class MeetingController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/id/{id}")
-    public Meeting getMeeting(@PathVariable Long id) {
-        Meeting meeting = calendarService.getMeetingById(id);
-        return meeting;
+    public MeetingDto getMeeting(@PathVariable Long id) {
+        MeetingDto meetingDto = calendarService.getMeetingDtoById(id);
+        return meetingDto;
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    public String updateMeeting() {
-        String str = "{ \"name\": \"Zitan\", \"version\": \"1.0.0\" }";
-        return str;
+    @RequestMapping(method = RequestMethod.PUT, value = "/id/{id}")
+    public MeetingDto updateMeeting(@PathVariable Long id, MeetingDto dto) {
+        MeetingDto updated = calendarService.updateMeeting(dto);
+        return updated;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public String deleteMeeting() {
-        String str = "{ \"name\": \"Zitan\", \"version\": \"1.0.0\" }";
-        return str;
+    @RequestMapping(method = RequestMethod.DELETE, value = "/id/{id}")
+    public void deleteMeeting(@PathVariable Long id) {
+        calendarService.deleteMeeting(id);
     }
 
 }

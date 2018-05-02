@@ -25,38 +25,46 @@ import java.sql.Time;
 @Setter
 @ToString
 public class Meeting extends TimestampEntity{
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Column(name = "name")
 	//TODO:数字に特に意味はないので検討必要
 	@Size(max = 50)
 	private String name;
-	
+
 	@Column(name = "room")
 	//実際の会議室名の最大31なので少し余裕を持って60
 	@Size(max = 60)
 	private String room;
-	
+
 	@Column(name = "date")
 	private Date date;
-	
+
 	@Column(name = "start_time")
 	private Time startTime;
-	
+
 	@Column(name = "end_time")
 	private Time endTime;
-	
+
 	@OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<User> member;
-	
+
+	@Column(name = "description")
+	@Size(max = 1000)
+	private String description;
+
+	@Column(name = "goal")
+	@Size(max = 1000)
+	private String goal;
+
 	public Meeting() {
 		super();
 	}
-	
+
 	public Meeting(String name, String room, Date date, Time startTime, Time endTime) {
 		super();
 		this.name = name;
@@ -64,9 +72,9 @@ public class Meeting extends TimestampEntity{
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		
+
 	}
-	
+
 }
 
 

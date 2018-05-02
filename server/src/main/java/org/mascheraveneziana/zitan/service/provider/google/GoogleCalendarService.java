@@ -80,7 +80,7 @@ public class GoogleCalendarService implements ProviderCalendarService {
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient("google", token);
         Credential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
 
-        Calendar calendarService = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credential)
+        Calendar calendarService = new Calendar.Builder(new NetHttpTransport(), JacksonFactory.getDefaultInstance(), credential)
                  .setApplicationName(systemService.system().getApplicationName())
                 .build();
         return calendarService;

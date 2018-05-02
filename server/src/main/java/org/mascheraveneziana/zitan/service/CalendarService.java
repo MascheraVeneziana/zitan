@@ -2,54 +2,28 @@ package org.mascheraveneziana.zitan.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.stream.Collectors;
 import java.util.*;
 
+import org.mascheraveneziana.zitan.ZitanException;
 import org.mascheraveneziana.zitan.domain.Meeting;
-import org.mascheraveneziana.zitan.domain.User;
 import org.mascheraveneziana.zitan.dto.MeetingDto;
 import org.mascheraveneziana.zitan.dto.UserDto;
 import org.mascheraveneziana.zitan.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.services.admin.directory.Directory;
-import com.google.api.services.admin.directory.Directory.Resources.Calendars;
-import com.google.api.services.admin.directory.Directory.Resources.Calendars.List;
-import com.google.api.services.calendar.model.Calendar;
-import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 
 @Service
 public class CalendarService {
-	private static final String APPLICATION_NAME = "zitan";
-	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
 	@Autowired
     OAuth2AuthorizedClientService authorizedClientService;
@@ -91,15 +65,79 @@ public class CalendarService {
 		client.events().insert(email, event).setSendNotifications(canSend).execute();
 	}
 
-    public java.util.List<Meeting> getMeetings() {
+    public java.util.List<MeetingDto> getMeetingDtoList() {
         java.util.List<Meeting> meetings = meetingRepository.findAll();
-        return meetings;
+        java.util.List<MeetingDto> meetingDtos = meetings.stream().map(meeting -> {
+            MeetingDto dto = translateToDto(meeting);
+            return dto;
+        }).collect(Collectors.toList());
+        return meetingDtos;
     }
 
-    public Meeting getMeetingById(Long id) {
+    public MeetingDto getMeetingDtoById(Long id) {
         Optional<Meeting> meetingOptional = meetingRepository.findById(id);
         Meeting meeting = meetingOptional.orElse(null);
-        return meeting;
+        if (meeting == null) {
+            throw new ZitanException("not found meeting", HttpStatus.NOT_FOUND);
+        }
+
+        MeetingDto dto = translateToDto(meeting);
+        return dto;
+    }
+
+    public MeetingDto updateMeeting(MeetingDto oldDto) {
+        // TODO: 実行してきたエンドユーザーにミーティングを更新する権限があるかの確認が必要
+        Optional<Meeting> meetingOptional = meetingRepository.findById(oldDto.getId());
+        Meeting meeting = meetingOptional.orElse(null);
+        if (meeting == null) {
+            throw new ZitanException("not found meeting", HttpStatus.NOT_FOUND);
+        }
+
+        meeting.setName(oldDto.getName());
+        meeting.setRoom(oldDto.getRoom());
+        meeting.setDate(oldDto.getDate());
+        meeting.setStartTime(oldDto.getStartTime());
+        meeting.setEndTime(oldDto.getEndTime());
+        // TODO: 登録する必要があるかどうか
+//        meeting.setMember(null);
+        meeting.setDescription(oldDto.getDescription());
+        meeting.setGoal(oldDto.getGoal());
+
+        Meeting newMeeting = meetingRepository.save(meeting);
+        MeetingDto newMeetingDto = translateToDto(newMeeting);
+        return newMeetingDto;
+    }
+
+    public void deleteMeeting(Long id) {
+        // TODO: 実行してきたエンドユーザーに引数のIDのミーティングを削除する権限があるかの確認が必要
+        Optional<Meeting> meetingOptional = meetingRepository.findById(id);
+        Meeting meeting = meetingOptional.orElse(null);
+        if (meeting == null) {
+            throw new ZitanException("not found meeting", HttpStatus.NOT_FOUND);
+        }
+
+        meetingRepository.delete(meeting);
+    }
+
+    private MeetingDto translateToDto(Meeting meeting) {
+        java.util.List<UserDto> members = meeting.getMember().stream().map(member -> {
+            UserDto userDto = new UserDto(member.getEmail());
+            return userDto;
+        }).collect(Collectors.toList());
+
+        MeetingDto dto = new MeetingDto(
+                meeting.getId(),
+                meeting.getName(),
+                meeting.getRoom(),
+                meeting.getDate(),
+                meeting.getStartTime(),
+                meeting.getEndTime(),
+                members,
+                meeting.getDescription(),
+                meeting.getGoal(),
+                // TODO 何を指定すればＯＫ？
+                true);
+        return dto;
     }
 
 }

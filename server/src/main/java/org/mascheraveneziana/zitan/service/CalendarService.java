@@ -8,9 +8,11 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.*;
 
+import org.mascheraveneziana.zitan.domain.Meeting;
 import org.mascheraveneziana.zitan.domain.User;
 import org.mascheraveneziana.zitan.dto.MeetingDto;
 import org.mascheraveneziana.zitan.dto.UserDto;
+import org.mascheraveneziana.zitan.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,12 +50,13 @@ import com.google.api.services.calendar.model.EventDateTime;
 public class CalendarService {
 	private static final String APPLICATION_NAME = "zitan";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-	
+
 	@Autowired
     OAuth2AuthorizedClientService authorizedClientService;
     @Autowired
     ClientRegistrationRepository clientRegistrationRepository;
-   
+    @Autowired
+    MeetingRepository meetingRepository;
 
 	public void addEvent(String email, MeetingDto meetingDto, com.google.api.services.calendar.Calendar client) throws IOException {
 		Event event = new Event();
@@ -62,13 +65,13 @@ public class CalendarService {
 	    String str = meetingDto.getDate().toString() + "T";
 	    String utc = "+09:00";
 	    DateTime start = new DateTime(str + meetingDto.getStartTime().toString() + utc);
-	    
+
 	    event.setStart(new EventDateTime().setDateTime(start));
 	    DateTime end = new DateTime(str + meetingDto.getEndTime().toString() + utc);
 	    event.setEnd(new EventDateTime().setDateTime(end));
 	    ArrayList<EventAttendee> attendeeList = new ArrayList<EventAttendee>();
-	    
-	    
+
+
 	    for(UserDto user : meetingDto.getUserList()) {
 	    		System.out.println(user.getEmail());
 	    		EventAttendee eventAttendee = new EventAttendee();
@@ -83,10 +86,20 @@ public class CalendarService {
 	    EventAttendee eventAttendee = new EventAttendee();
 	    eventAttendee.setEmail(meetingDto.getRoom());
 	    attendeeList.add(eventAttendee);
-	    
+
 	    event.setAttendees(attendeeList);
 		client.events().insert(email, event).setSendNotifications(canSend).execute();
 	}
-	
-	
+
+    public java.util.List<Meeting> getMeetings() {
+        java.util.List<Meeting> meetings = meetingRepository.findAll();
+        return meetings;
+    }
+
+    public Meeting getMeetingById(Long id) {
+        Optional<Meeting> meetingOptional = meetingRepository.findById(id);
+        Meeting meeting = meetingOptional.orElse(null);
+        return meeting;
+    }
+
 }

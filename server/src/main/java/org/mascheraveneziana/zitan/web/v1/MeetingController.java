@@ -1,8 +1,10 @@
 package org.mascheraveneziana.zitan.web.v1;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
+import org.mascheraveneziana.zitan.domain.Meeting;
 import org.mascheraveneziana.zitan.domain.User;
 import org.mascheraveneziana.zitan.dto.MeetingDto;
 import org.mascheraveneziana.zitan.repository.MeetingRepository;
@@ -12,6 +14,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +33,7 @@ public class MeetingController {
 	private static final String APPLICATION_NAME = "zitan";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static  com.google.api.services.calendar.Calendar client;
-	
+
 	@Autowired
     OAuth2AuthorizedClientService authorizedClientService;
     @Autowired
@@ -39,29 +42,21 @@ public class MeetingController {
     MeetingRepository mRepository;
     @Autowired
     CalendarService calendarService;
-    
+
     @RequestMapping(method = RequestMethod.GET)
-    public String getMeeting() {
-        ObjectMapper mapper = new ObjectMapper();
-        String json;
-        try {
-          json = mapper.writeValueAsString(mRepository.findAll());
-          return json;
-        } catch (JsonProcessingException e) {
-          e.printStackTrace();
-          return "{\"error\": \"Can not read Meeting Data.\"}";
-        }
+    public List<Meeting> getMeetings() {
+        List<Meeting> meetings = calendarService.getMeetings();
+        return meetings;
     }
 
-    
     @RequestMapping(method = RequestMethod.POST, value = "/add")
     public String createMeeting(@RequestBody MeetingDto meetingDto, OAuth2AuthenticationToken authentication) throws IOException {
-    	OAuth2AuthorizedClient authorizedClient = 
+    	OAuth2AuthorizedClient authorizedClient =
 				this.authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
 		GoogleCredential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
 		client = new com.google.api.services.calendar.Calendar.Builder(
 				new NetHttpTransport(), JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
-		
+
 		Map<String, Object> map = authentication.getPrincipal().getAttributes();
         User user = new User();
         user.setName((String) map.get("name"));
@@ -70,6 +65,12 @@ public class MeetingController {
 //    	String str = "{ \"name\": \"Zitan\", \"version\": \"1.0.0\" }";
         String str =  "OK";
         return str;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/id/{id}")
+    public Meeting getMeeting(@PathVariable Long id) {
+        Meeting meeting = calendarService.getMeetingById(id);
+        return meeting;
     }
 
     @RequestMapping(method = RequestMethod.PUT)

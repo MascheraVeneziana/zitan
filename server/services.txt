@@ -1,4 +1,30 @@
-POST    /add                  CalendarController.addEvent
+=========================================================================================================
+GET     /api/v1/meeting                      MeetingController.getMeetings  get all meetings
+=========================================================================================================
+response:
+{ [
+  "name": "test",
+  "room": "test",
+  "date": "2018/03/23",
+  "startTime": "09:12:00",
+  "endTime": "10:12:00"
+] }
+
+=========================================================================================================
+GET     /api/v1/meeting/id/{id}               MeetingController.getMeeting  get a meeting by id
+=========================================================================================================
+response:
+{ [
+  "name": "test",
+  "room": "test",
+  "date": "2018/03/23",
+  "startTime": "09:12:00",
+  "endTime": "10:12:00"
+] }
+
+=========================================================================================================
+POST    /api/v1/meeting/add                  CalendarController.addEvent
+=========================================================================================================
  TODO:今後メンバーを追加する
  Example Data
  {
@@ -125,10 +151,10 @@ request:
 }
 response:
 {
-  "openable": false,
+  "openable": false,                          // openable is true if all users & resources is free
   "accounts": [ {
     "email": "user@gmail.address",
-    "free": true                              // openable is true if all users & resources is free
+    "free": true
   }, {
     "email": "resource@gmail.address",
     "free": false

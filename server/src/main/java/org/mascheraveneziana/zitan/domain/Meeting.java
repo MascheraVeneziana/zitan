@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -49,6 +50,9 @@ public class Meeting extends TimestampEntity{
 
 	@Column(name = "end_time")
 	private Time endTime;
+
+	@OneToOne
+	private User mainUser;
 
 	@OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<User> member;

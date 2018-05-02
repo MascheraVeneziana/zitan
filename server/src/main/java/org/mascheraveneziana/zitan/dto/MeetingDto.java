@@ -22,6 +22,7 @@ public class MeetingDto {
 	private Date date;
 	private Time startTime;
 	private Time endTime;
+	private UserDto mainUser;
 	private List<UserDto> userList;
 	private 	String description;
 	private String goal;

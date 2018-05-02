@@ -44,7 +44,8 @@ public class GoogleCalendarService implements ProviderCalendarService {
     @Autowired
     private SystemService systemService;
 
-    public Event getEventById(OAuth2AuthenticationToken authentication, String eventId) {
+    @Override
+    public Event getEvent(OAuth2AuthenticationToken authentication, String eventId) {
         try {
             Calendar calendarService = getCalendarService(authentication);
             Event event = calendarService.events().get("primary", eventId).execute();
@@ -54,7 +55,8 @@ public class GoogleCalendarService implements ProviderCalendarService {
         }
     }
 
-    public Event create(OAuth2AuthenticationToken authentication, Event event) {
+    @Override
+    public Event createEvent(OAuth2AuthenticationToken authentication, Event event) {
         try {
             String id = authentication.getPrincipal().getName();
             ProviderAccount account = accountService.getUserById(authentication, id);
@@ -70,7 +72,8 @@ public class GoogleCalendarService implements ProviderCalendarService {
         }
     }
 
-    public Event update(OAuth2AuthenticationToken authentication, Event event) {
+    @Override
+    public Event updateEvent(OAuth2AuthenticationToken authentication, Event event) {
         try {
             Calendar calendarService = getCalendarService(authentication);
 
@@ -82,7 +85,8 @@ public class GoogleCalendarService implements ProviderCalendarService {
         }
     }
 
-    public void delete(OAuth2AuthenticationToken authentication, String eventId) {
+    @Override
+    public void deleteEvent(OAuth2AuthenticationToken authentication, String eventId) {
         try {
             Calendar calendarService = getCalendarService(authentication);
 

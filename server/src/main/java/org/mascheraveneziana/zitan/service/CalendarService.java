@@ -199,10 +199,8 @@ public class CalendarService {
                 continue;
             }
             eventAttendee.setEmail(userDto.getEmail());
-
-            // TODO 出席が必須か任意かはユーザー自身のデータかもしれない
-            //任意のやつ
-//            eventAttendee.setOptional(meetingDto.getCanFree());
+            boolean required = userDto.getRequired() != null ? userDto.getRequired().booleanValue() : false;
+            eventAttendee.setOptional(!required);
             list.add(eventAttendee);
         }
         return list;

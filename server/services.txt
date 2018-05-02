@@ -52,6 +52,11 @@ response:
 =========================================================================================================
 GET     /api/v1/system               SystemController.system         system information
 =========================================================================================================
+response:
+{
+  "version": "V1.0.0",
+  "applicationName": "Zitan"              // defined by end user (not permanently "Zitan")
+}
 
 ==========================================================================================================
 GET     /api/v1/provider/google/users                       get all-users's profile

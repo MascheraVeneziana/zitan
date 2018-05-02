@@ -10,6 +10,7 @@ import org.mascheraveneziana.zitan.domain.provider.ProviderAccount;
 import org.mascheraveneziana.zitan.domain.provider.ProviderMeetingGroup;
 import org.mascheraveneziana.zitan.domain.provider.google.GoogleAccount;
 import org.mascheraveneziana.zitan.domain.provider.google.GoogleMeetingGroup;
+import org.mascheraveneziana.zitan.service.SystemService;
 import org.mascheraveneziana.zitan.service.provider.ProviderCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,9 @@ public class GoogleCalendarService implements ProviderCalendarService {
 
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
+
+    @Autowired
+    private SystemService systemService;
 
     @Override
     public ProviderMeetingGroup getStatus(OAuth2AuthenticationToken authentication, ProviderMeetingGroup group) {
@@ -77,8 +81,7 @@ public class GoogleCalendarService implements ProviderCalendarService {
         Credential credential = new GoogleCredential().setAccessToken(authorizedClient.getAccessToken().getTokenValue());
 
         Calendar calendarService = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credential)
-                // TODO: read from properties file
-                // .setApplicationName("")
+                 .setApplicationName(systemService.system().getApplicationName())
                 .build();
         return calendarService;
     }

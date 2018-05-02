@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.mascheraveneziana.zitan.ZitanException;
 import org.mascheraveneziana.zitan.domain.provider.ProviderAccount;
 import org.mascheraveneziana.zitan.domain.provider.google.GoogleAccount;
+import org.mascheraveneziana.zitan.service.SystemService;
 import org.mascheraveneziana.zitan.service.provider.ProviderAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,9 @@ public class GoogleAccountService implements ProviderAccountService {
 
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
+
+    @Autowired
+    private SystemService systemService;
 
     @Override
     public ProviderAccount getUserById(OAuth2AuthenticationToken authentication, String id) {
@@ -107,8 +111,7 @@ public class GoogleAccountService implements ProviderAccountService {
                 .setAccessToken(authorizedClient.getAccessToken().getTokenValue());
 
         Directory directoryService = new Directory.Builder(new NetHttpTransport(), new JacksonFactory(), credential)
-                // TODO: read from properties file
-                // .setApplicationName("")
+                 .setApplicationName(systemService.system().getApplicationName())
                 .build();
         return directoryService;
     }

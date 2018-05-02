@@ -12,11 +12,11 @@ public interface ProviderCalendarService {
 
     public Event getEvent(OAuth2AuthenticationToken authentication, String eventId);
 
-    public Event createEvent(OAuth2AuthenticationToken authentication, Event event);
+    public Event createEvent(OAuth2AuthenticationToken authentication, Event event, boolean notify);
 
-    public Event updateEvent(OAuth2AuthenticationToken authentication, Event event);
+    public Event updateEvent(OAuth2AuthenticationToken authentication, Event event, boolean notify);
 
-    public void deleteEvent(OAuth2AuthenticationToken authentication, String eventId);
+    public void deleteEvent(OAuth2AuthenticationToken authentication, String eventId, boolean notify);
 
     public ProviderMeetingGroup getStatus(OAuth2AuthenticationToken authentication, ProviderMeetingGroup group);
 

@@ -16,33 +16,43 @@ public class MeetingDto {
     private Long id;
 	private String name;
 	private String room;
+	private String description;
+	private String goal;
 
 	@JsonFormat(pattern = "yyyy/MM/dd")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private Date date;
+
 	private Time startTime;
 	private Time endTime;
 	private UserDto mainUser;
-	private List<UserDto> userList;
-	private 	String description;
-	private String goal;
-	private Boolean canFree;
+	private List<UserDto> members;
+	private String providerEventId;
 
-	public MeetingDto (Long id, String name, String room, Date date, Time startTime, Time endTime, List<UserDto> userList, String description, String goal, Boolean canFree) {
+	// not register to database
+	private List<UserDto> resources;
+	private Boolean notify;
+
+	public MeetingDto () {
+	}
+
+	public MeetingDto (Long id, String name, String room, String description, String goal,
+	        Date date, Time startTime, Time endTime, UserDto mainUser, List<UserDto> members, String providerEventId,
+	        List<UserDto> resources, Boolean notify) {
+
 	    this.id = id;
 	    this.name = name;
 		this.room = room;
+		this.description = description;
+		this.goal = goal;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.userList = userList;
-		this.description = description;
-		this.goal = goal;
-		this.canFree = canFree;
+		this.mainUser = mainUser;
+		this.members = members;
+		this.providerEventId = providerEventId;
+		this.resources = resources;
+		this.notify = notify;
 	}
-
-	public MeetingDto () {}
-
-
 
 }

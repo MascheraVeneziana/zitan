@@ -3,36 +3,96 @@ GET     /api/v1/meeting                      MeetingController.getMeetings  get 
 =========================================================================================================
 response:
 { [
+  "id": 1234567890                                // meeting-id at application (long type)
   "name": "test",
   "room": "test",
+  "description": "Description",
+  "goal": "Goal",
   "date": "2018/03/23",
   "startTime": "09:12:00",
-  "endTime": "10:12:00"
-] }
-
-=========================================================================================================
-GET     /api/v1/meeting/id/{id}               MeetingController.getMeeting  get a meeting by id
-=========================================================================================================
-response:
-{ [
-  "name": "test",
-  "room": "test",
-  "date": "2018/03/23",
-  "startTime": "09:12:00",
-  "endTime": "10:12:00"
+  "endTime": "10:12:00",
+  "mainUser": {
+    "id": "1234567890",                           // string type
+    "name": "FullName",
+    "email": "full_name@gmail.com"
+  },
+  "members": [ {                                  // array
+    "id": "1234567890",                           // string type
+    "name": "FullName",
+    "email": "full_name@gmail.com",
+    "required": true                              // boolean type
+  } ]
+  "providerEventId": "provider-event-id"          // event-id at provider (string type),
 ] }
 
 =========================================================================================================
 POST    /api/v1/meeting/add                  CalendarController.addEvent
 =========================================================================================================
- TODO:今後メンバーを追加する
- Example Data
- {
-	"name":"test",
-	"room":"test",
-	"date":"2018/03/23",
-	"startTime":"09:12:00",
-	"endTime":"10:12:00"
+request:
+{
+  "name": "Name",
+  "room": "Room name",
+  "description": "Description",
+  "goal": "Goal",
+  "date": "2018/03/13",
+  "startTime": "09:12:00",
+  "endTime": "10:12:00",
+  "members": [ {
+    "email": "user@gmail.com",
+    "required": false                             // boolean
+  } ],
+  "resources": [ {
+    "email": "resource_email_address@gmail.com"
+  } ]
+  "notify": true                                  // boolean
+}
+response:
+{
+  "id": "meting-id",
+  "name": "test",
+  "room": "test",
+  "description": "Description",
+  "goal": "Goal",
+  "date": "2018/03/23",
+  "startTime": "09:12:00",
+  "endTime": "10:12:00",
+  "mainUser": {
+    "id": "user@gmail.com"
+    "name": "FullName",
+    "email": "user@gmail.com",
+  }
+  "members": [ {
+    "id": "user@gmail.com"
+    "name": "FullName",
+    "email": "user@gmail.com",
+    "required": false                             // boolean
+  } ],
+}
+
+=========================================================================================================
+GET     /api/v1/meeting/id/{id}               MeetingController.getMeeting  get a meeting by id
+=========================================================================================================
+response:
+{
+  "id": "meting-id",
+  "name": "test",
+  "room": "test",
+  "description": "Description",
+  "goal": "Goal",
+  "date": "2018/03/23",
+  "startTime": "09:12:00",
+  "endTime": "10:12:00",
+  "mainUser": {
+    "id": "user@gmail.com"
+    "name": "FullName",
+    "email": "user@gmail.com",
+  }
+  "members": [ {
+    "id": "user@gmail.com"
+    "name": "FullName",
+    "email": "user@gmail.com",
+    "required": false                             // boolean
+  } ],
 }
 
 =========================================================================================================

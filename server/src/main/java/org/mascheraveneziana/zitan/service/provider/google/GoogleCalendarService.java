@@ -56,7 +56,7 @@ public class GoogleCalendarService implements ProviderCalendarService {
     }
 
     @Override
-    public Event createEvent(OAuth2AuthenticationToken authentication, Event event) {
+    public Event createEvent(OAuth2AuthenticationToken authentication, Event event, boolean notify) {
         try {
             String id = authentication.getPrincipal().getName();
             ProviderAccount account = accountService.getUserById(authentication, id);
@@ -65,7 +65,7 @@ public class GoogleCalendarService implements ProviderCalendarService {
 
             // https://developers.google.com/calendar/v3/reference/events/insert
             Event created = calendarService.events().insert(account.getEmail(), event)
-                    .setSendNotifications(true).execute();
+                    .setSendNotifications(notify).execute();
             return created;
         } catch (IOException e) {
             throw new ZitanException(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,12 +73,13 @@ public class GoogleCalendarService implements ProviderCalendarService {
     }
 
     @Override
-    public Event updateEvent(OAuth2AuthenticationToken authentication, Event event) {
+    public Event updateEvent(OAuth2AuthenticationToken authentication, Event event, boolean notify) {
         try {
             Calendar calendarService = getCalendarService(authentication);
 
             // https://developers.google.com/calendar/v3/reference/events/update
-            Event updated = calendarService.events().update("primary", event.getId(), event).execute();
+            Event updated = calendarService.events().update("primary", event.getId(), event)
+                    .setSendNotifications(notify).execute();
             return updated;
         } catch (IOException e) {
             throw new ZitanException(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,12 +87,12 @@ public class GoogleCalendarService implements ProviderCalendarService {
     }
 
     @Override
-    public void deleteEvent(OAuth2AuthenticationToken authentication, String eventId) {
+    public void deleteEvent(OAuth2AuthenticationToken authentication, String eventId, boolean notify) {
         try {
             Calendar calendarService = getCalendarService(authentication);
 
             // https://developers.google.com/calendar/v3/reference/events/delete
-            calendarService.events().delete("primary", eventId);
+            calendarService.events().delete("primary", eventId).setSendNotifications(notify).execute();
         } catch (IOException e) {
             throw new ZitanException(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

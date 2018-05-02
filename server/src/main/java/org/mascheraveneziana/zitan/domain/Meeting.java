@@ -1,8 +1,6 @@
 package org.mascheraveneziana.zitan.domain;
 
-
-
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,7 +23,7 @@ import java.sql.Time;
 @Getter
 @Setter
 @ToString
-public class Meeting extends TimestampEntity{
+public class Meeting extends TimestampEntity {
 
 	@Id
 	@GeneratedValue
@@ -42,6 +40,14 @@ public class Meeting extends TimestampEntity{
 	@Size(max = 60)
 	private String room;
 
+   @Column(name = "description")
+    @Size(max = 1000)
+    private String description;
+
+    @Column(name = "goal")
+    @Size(max = 1000)
+    private String goal;
+
 	@Column(name = "date")
 	private Date date;
 
@@ -51,19 +57,12 @@ public class Meeting extends TimestampEntity{
 	@Column(name = "end_time")
 	private Time endTime;
 
+	// TODO 結合はどうやるの？
 	@OneToOne
 	private User mainUser;
 
 	@OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<User> member;
-
-	@Column(name = "description")
-	@Size(max = 1000)
-	private String description;
-
-	@Column(name = "goal")
-	@Size(max = 1000)
-	private String goal;
+	private List<User> members;
 
 	@Column(name = "provider_event_id")
 	@Size(max = 30)
@@ -73,14 +72,19 @@ public class Meeting extends TimestampEntity{
 		super();
 	}
 
-	public Meeting(String name, String room, Date date, Time startTime, Time endTime) {
+	public Meeting(String name, String room, String description, String goal,
+	        Date date, Time startTime, Time endTime, User mainUser, List<User> members, String providerEventId) {
 		super();
 		this.name = name;
 		this.room = room;
+		this.description = description;
+		this.goal = goal;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-
+		this.mainUser = mainUser;
+		this.members = members;
+		this.providerEventId = providerEventId;
 	}
 
 }

@@ -1,6 +1,5 @@
 package org.mascheraveneziana.zitan.service;
 
-import java.io.IOException;
 import java.sql.Time;
 import java.util.stream.Collectors;
 import java.util.*;
@@ -38,31 +37,58 @@ public class CalendarService {
     @Autowired
     ProviderCalendarService calendarService;
 
-	public void addEvent(OAuth2AuthenticationToken authentication, String email, MeetingDto meetingDto) throws IOException {
-		Event event = new Event();
+	public MeetingDto addEvent(OAuth2AuthenticationToken authentication, String email, MeetingDto meetingDto) {
+	    User mainUser = userService.getUser(meetingDto.getMainUser().getId());
 
-		Boolean canSend = true;
+	    List<User> members = getUserList(meetingDto.getMembers());
 
-		event.setSummary(meetingDto.getName());
+	    Meeting meeting = new Meeting();
+	    meeting.setName(meetingDto.getName());
+	    meeting.setRoom(meetingDto.getRoom());
+	    meeting.setDescription(meetingDto.getDescription());
+	    meeting.setGoal(meetingDto.getGoal());
+	    meeting.setDate(meetingDto.getDate());
+	    meeting.setStartTime(meetingDto.getStartTime());
+	    meeting.setEndTime(meetingDto.getEndTime());
+	    meeting.setMainUser(mainUser);
+	    meeting.setMembers(members);
 
-		DateTime start = getDateTime(meetingDto.getDate(), meetingDto.getStartTime());
-	    event.setStart(new EventDateTime().setDateTime(start));
+	    // プロバイダーのデータを作成（プロバイダーでデータを作成できなくても処理を継続する。）
+	    try {
+            Event event = new Event();
 
-	    DateTime end = getDateTime(meetingDto.getDate(), meetingDto.getEndTime());
-	    event.setEnd(new EventDateTime().setDateTime(end));
+            event.setSummary(meetingDto.getName());
 
-	    List<EventAttendee> attendeeList = getEventAttendeeList(meetingDto.getUserList());
+            DateTime start = getDateTime(meetingDto.getDate(), meetingDto.getStartTime());
+            event.setStart(new EventDateTime().setDateTime(start));
 
-	    EventAttendee eventAttendee = new EventAttendee();
-	    eventAttendee.setEmail(meetingDto.getRoom());
-	    attendeeList.add(eventAttendee);
+            DateTime end = getDateTime(meetingDto.getDate(), meetingDto.getEndTime());
+            event.setEnd(new EventDateTime().setDateTime(end));
 
-	    event.setAttendees(attendeeList);
+            List<EventAttendee> attendeeList = getEventAttendeeList(meetingDto.getMembers());
 
-	    Event newEvent = calendarService.createEvent(authentication, event);
+            EventAttendee eventAttendee = new EventAttendee();
+
+            eventAttendee.setEmail(meetingDto.getRoom());
+            attendeeList.add(eventAttendee);
+
+            event.setAttendees(attendeeList);
+
+            Event newEvent = calendarService.createEvent(authentication, event, meetingDto.getNotify());
+            meeting.setProviderEventId(newEvent.getId());
+            meeting = meetingRepository.save(meeting);
+	    } catch (Exception e) {
+	        // TODO log warn - could not create at provider
+	        e.printStackTrace();
+	    }
+
+	    // アプリケーションのデータベースを更新
+	    meeting = meetingRepository.save(meeting);
+	    MeetingDto newMeetingDto = translateToDto(meeting);
+	    return newMeetingDto;
 	}
 
-    public java.util.List<MeetingDto> getMeetingDtoList() {
+    public List<MeetingDto> getMeetingDtoList() {
         java.util.List<Meeting> meetings = meetingRepository.findAll();
         java.util.List<MeetingDto> meetingDtoList = meetings.stream().map(meeting -> {
             MeetingDto dto = translateToDto(meeting);
@@ -106,9 +132,9 @@ public class CalendarService {
                     .setSummary(dto.getName())
                     .setStart(new EventDateTime().setDateTime(startDateTime))
                     .setEnd(new EventDateTime().setDateTime(endDateTime))
-                    .setAttendees(getEventAttendeeList(dto.getUserList()));
+                    .setAttendees(getEventAttendeeList(dto.getMembers()));
 
-            Event newEvent = calendarService.updateEvent(authentication, event);
+            Event newEvent = calendarService.updateEvent(authentication, event, dto.getNotify());
             meeting.setProviderEventId(newEvent.getId());
         } catch (Exception e) {
             // TODO log warn
@@ -120,7 +146,7 @@ public class CalendarService {
         meeting.setDate(dto.getDate());
         meeting.setStartTime(dto.getStartTime());
         meeting.setEndTime(dto.getEndTime());
-        meeting.setMember(new HashSet<User>(getUserList(dto.getUserList())));
+        meeting.setMembers(getUserList(dto.getMembers()));
         meeting.setDescription(dto.getDescription());
         meeting.setGoal(dto.getGoal());
 
@@ -149,7 +175,7 @@ public class CalendarService {
 
         // プロバイダーのデータを削除（プロバイダーで削除できなくても処理は続行する）
         try {
-            calendarService.deleteEvent(authentication, meeting.getProviderEventId());
+            calendarService.deleteEvent(authentication, meeting.getProviderEventId(), false);
         } catch (Exception e) {
             // TODO log warn  - could not delete
             e.printStackTrace();
@@ -196,23 +222,29 @@ public class CalendarService {
     }
 
     private MeetingDto translateToDto(Meeting meeting) {
-        java.util.List<UserDto> members = meeting.getMember().stream().map(member -> {
-            UserDto userDto = new UserDto(member.getEmail());
+        User mainUser = userService.getUser(meeting.getMainUser().getId());
+        UserDto mainUserDto = new UserDto(mainUser.getId(), mainUser.getName(), mainUser.getEmail(), true);
+
+        List<UserDto> members = meeting.getMembers().stream().map(member -> {
+            UserDto userDto = new UserDto();
+            userDto.setId(member.getId());
+            userDto.setName(member.getName());
+            userDto.setEmail(member.getEmail());
             return userDto;
         }).collect(Collectors.toList());
 
-        MeetingDto dto = new MeetingDto(
-                meeting.getId(),
-                meeting.getName(),
-                meeting.getRoom(),
-                meeting.getDate(),
-                meeting.getStartTime(),
-                meeting.getEndTime(),
-                members,
-                meeting.getDescription(),
-                meeting.getGoal(),
-                // TODO 何を指定すればＯＫ？
-                true);
+        MeetingDto dto = new MeetingDto();
+        dto.setId(meeting.getId());
+        dto.setName(meeting.getName());
+        dto.setRoom(meeting.getRoom());
+        dto.setDescription(meeting.getDescription());
+        dto.setGoal(meeting.getGoal());
+        dto.setDate(meeting.getDate());
+        dto.setStartTime(meeting.getStartTime());
+        dto.setEndTime(meeting.getEndTime());
+        dto.setMainUser(mainUserDto);
+        dto.setMembers(members);
+        dto.setProviderEventId(meeting.getProviderEventId());
         return dto;
     }
 

@@ -1,6 +1,5 @@
 package org.mascheraveneziana.zitan.web.v1;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,14 +32,14 @@ public class MeetingController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/add")
-    public String createMeeting(@RequestBody MeetingDto meetingDto, OAuth2AuthenticationToken authentication) throws IOException {
+    public MeetingDto createMeeting(@RequestBody MeetingDto meetingDto, OAuth2AuthenticationToken authentication) {
 
 		Map<String, Object> map = authentication.getPrincipal().getAttributes();
         User user = new User();
         user.setName((String) map.get("name"));
         user.setEmail((String) map.get("email"));
-        calendarService.addEvent(authentication, user.getEmail(), meetingDto);
-        return "ok";
+        MeetingDto newMetingDto = calendarService.addEvent(authentication, user.getEmail(), meetingDto);
+        return newMetingDto;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/id/{id}")

@@ -38,7 +38,8 @@ public class CalendarService {
     ProviderCalendarService calendarService;
 
 	public MeetingDto addEvent(OAuth2AuthenticationToken authentication, String email, MeetingDto meetingDto) {
-	    User mainUser = userService.getUser(meetingDto.getMainUser().getId());
+//	    User mainUser = userService.getUser(meetingDto.getMainUser().getId());
+	    User mainUser = userService.getUser(authentication.getName());
 
 	    List<User> members = getUserList(meetingDto.getMembers());
 
@@ -68,9 +69,10 @@ public class CalendarService {
             List<EventAttendee> attendeeList = getEventAttendeeList(meetingDto.getMembers());
 
             EventAttendee eventAttendee = new EventAttendee();
-
-            eventAttendee.setEmail(meetingDto.getRoom());
-            attendeeList.add(eventAttendee);
+            if(!meetingDto.getRoom().equals("")) {
+                eventAttendee.setEmail(meetingDto.getRoom());
+                attendeeList.add(eventAttendee);
+            }
 
             event.setAttendees(attendeeList);
 
@@ -209,7 +211,7 @@ public class CalendarService {
     private List<User> getUserList(List<UserDto> userDtoList) {
         List<User> list = new ArrayList<>();
         for (UserDto userDto : userDtoList) {
-            User user = userService.getUser(userDto.getEmail());
+            User user = userService.getUser(userDto.getId());
             if (user == null) {
                 continue;
                 // TODO: log warn - user not found

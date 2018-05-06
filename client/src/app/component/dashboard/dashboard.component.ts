@@ -36,6 +36,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.ELEMENT_DATA.push(element);
         });
       }
+      this.table.renderRows();
     },
       error => {
         console.log(error);

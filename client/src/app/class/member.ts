@@ -1,47 +1,81 @@
 export class Member {
-  private _id: number;
-  private _name: string;
-  private _type: number;
-  private _reason: string;
+  private id: string;
+  private name: string;
+  private email: string;
+  private required: boolean;
 
 
-  constructor(id: number, name: string, type: number, reason: string) {
-    this._id = id;
-    this._name = name;
-    this._type = type;
-    this._reason = reason;
+  constructor($id: string, $name: string, $email: string, $required: boolean) {
+    this.id = $id;
+    this.name = $name;
+    this.email = $email;
+    this.required = $required;
   }
 
-  public get id(): number {
-    return this._id;
+  /**
+   * Getter $id
+   * @return {string}
+   */
+  public get $id(): string {
+    return this.id;
   }
 
-  public set id(value: number) {
-    this._id = value;
+  /**
+   * Setter $id
+   * @param {string} value
+   */
+  public set $id(value: string) {
+    this.id = value;
   }
 
-  public get name(): string {
-    return this._name;
+  /**
+   * Getter $name
+   * @return {string}
+   */
+  public get $name(): string {
+    return this.name;
   }
 
-  public set name(value: string) {
-    this._name = value;
+  /**
+   * Setter $name
+   * @param {string} value
+   */
+  public set $name(value: string) {
+    this.name = value;
   }
 
-  public get type(): number {
-    return this._type;
+  /**
+   * Getter $email
+   * @return {string}
+   */
+  public get $email(): string {
+    return this.email;
   }
 
-  public set type(value: number) {
-    this._type = value;
+  /**
+   * Setter $email
+   * @param {string} value
+   */
+  public set $email(value: string) {
+    this.email = value;
   }
 
-  public get reason(): string {
-    return this._reason;
+  /**
+   * Getter $required
+   * @return {boolean}
+   */
+  public get $required(): boolean {
+    return this.required;
   }
 
-  public set reason(value: string) {
-    this._reason = value;
+  /**
+   * Setter $required
+   * @param {boolean} value
+   */
+  public set $required(value: boolean) {
+    this.required = value;
   }
+
+
 
 }

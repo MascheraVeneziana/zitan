@@ -14,7 +14,7 @@ export class AddMemberDialogComponent implements OnInit {
   public memberAddGroup: FormGroup;
   public memberType;
   private editFlag: boolean;
-  private editId: number;
+  private editId: string;
 
   constructor(
     public dialogRef: MatDialogRef<AddMemberDialogComponent>,
@@ -27,14 +27,12 @@ export class AddMemberDialogComponent implements OnInit {
     this.memberAddGroup = this._formBuilder.group({
       memberName: ['', Validators.required],
       memberType: ['', Validators.required],
-      memberReason: ['', Validators.required]
     });
     if (this.data.member != null) {
       const member: Member = this.data.member;
-      this.memberAddGroup.controls.memberName.setValue(member.name);
-      this.memberAddGroup.controls.memberType.setValue(member.type);
-      this.memberAddGroup.controls.memberReason.setValue(member.reason);
-      this.editId = member.id;
+      this.memberAddGroup.controls.memberName.setValue(member.$name);
+      this.memberAddGroup.controls.memberType.setValue(member.$required);
+      this.editId = member.$id;
       this.editFlag = true;
     } else {
       this.editFlag = false;

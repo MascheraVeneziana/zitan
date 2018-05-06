@@ -34,7 +34,7 @@ public class MeetingController {
     @RequestMapping(method = RequestMethod.POST, value = "/add")
     public MeetingDto createMeeting(@RequestBody MeetingDto meetingDto, OAuth2AuthenticationToken authentication) {
 
-		Map<String, Object> map = authentication.getPrincipal().getAttributes();
+	Map<String, Object> map = authentication.getPrincipal().getAttributes();
         User user = new User();
         user.setName((String) map.get("name"));
         user.setEmail((String) map.get("email"));

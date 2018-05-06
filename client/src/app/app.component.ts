@@ -24,15 +24,16 @@ export class AppComponent implements OnInit {
 
   public ngOnInit() {
     this.appInfoService.getVersion().subscribe(appName => {
-      localStorage.setItem('appName', appName['name'] + ' Ver' + appName['version']);
+      localStorage.setItem('appName', appName['applicationName'] + ' ' + appName['version']);
       console.log(appName);
 
-      this.titleService.setTitle(appName['name'] + ' Ver' + appName['version']);
+      this.titleService.setTitle(appName['applicationName'] + ' ' + appName['version']);
     },
       error => {
         console.log(error);
       });
     this.userService.getByMe().subscribe(user => {
+      localStorage.setItem('userId', user['id']);
       localStorage.setItem('userName', user['name']);
       localStorage.setItem('userAddress', user['email']);
       console.log(user);
@@ -53,6 +54,7 @@ export class AppComponent implements OnInit {
       console.log(result);
       this.meetingService.create(result).subscribe(res => {
         console.log(res);
+        location.reload();
       }, error => {
         console.log(error);
       });

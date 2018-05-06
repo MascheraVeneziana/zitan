@@ -9,7 +9,7 @@
         </mat-form-field>
         <br />
         <mat-form-field>
-          <input matInput placeholder="会議室" formControlName="meetingRoomCtrl" required>
+          <input matInput placeholder="会議室" formControlName="meetingRoomCtrl">
         </mat-form-field>
         <br />
         <mat-form-field (click)="picker.open()">
@@ -52,27 +52,27 @@
 
           <ng-container matColumnDef="id">
             <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.$id}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header> 名前 </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.$name}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="type">
             <mat-header-cell *matHeaderCellDef> タイプ </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.$type}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="reason">
             <mat-header-cell *matHeaderCellDef> アサイン目的 </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.reason}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.$reason}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="edit">
             <mat-header-cell *matHeaderCellDef> 編集 </mat-header-cell>
-            <mat-cell *matCellDef="let element" (click)="openMemberEditDialog(element.id)">
+            <mat-cell *matCellDef="let element" (click)="openMemberEditDialog(element.$id)">
               <i class="fa fa-edit"></i>
             </mat-cell>
           </ng-container>

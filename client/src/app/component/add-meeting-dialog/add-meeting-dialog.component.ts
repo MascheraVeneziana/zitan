@@ -38,7 +38,7 @@ export class AddMeetingDialogComponent implements OnInit {
       startTimeCtrl: ['', Validators.required],
       endTimeCtrl: ['', Validators.required],
       meetingRoomCtrl: ['', Validators.required],
-      meetingAgenda: ['', Validators.required],
+      meetingDescription: ['', Validators.required],
       meetingGoal: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
@@ -47,15 +47,19 @@ export class AddMeetingDialogComponent implements OnInit {
     this.firstFormGroup.controls.mtgDateCtrl.disable();
   }
 
-  onNoClick(): void {
+  register(): void {
     const bufTime = new Date(0);
     bufTime.setHours(1, 1);
-    const mtg = new Meeting(0, this.firstFormGroup.controls.meetingNameCtrl.value,
+    const mtg = new Meeting(0,
+      this.firstFormGroup.controls.meetingNameCtrl.value,
       this.firstFormGroup.controls.meetingRoomCtrl.value,
+      this.firstFormGroup.controls.meetingDescription.value,
+      this.firstFormGroup.controls.meetingGoal.value,
       this.firstFormGroup.controls.mtgDateCtrl.value,
-      this.firstFormGroup.controls.startTimeCtrl.value,
-      this.firstFormGroup.controls.endTimeCtrl.value,
-      this.ELEMENT_DATA);
+      this.firstFormGroup.controls.startTimeCtrl.value + ':00',
+      this.firstFormGroup.controls.endTimeCtrl.value + ':00',
+      this.ELEMENT_DATA,
+      [], true);
     this.dialogRef.close(mtg);
   }
 

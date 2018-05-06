@@ -23,11 +23,11 @@ export class MeetingService {
   }
 
   update(meeting: Meeting) {
-    return this.http.put(this.apiUrl + '/meeting/' + meeting.id, meeting);
+    return this.http.put(this.apiUrl + '/meeting/' + meeting.$id, meeting);
   }
 
   delete(meeting: Meeting) {
-    return this.http.delete(this.apiUrl + '/meeting/' + meeting.id);
+    return this.http.delete(this.apiUrl + '/meeting/' + meeting.$id);
   }
 
 }

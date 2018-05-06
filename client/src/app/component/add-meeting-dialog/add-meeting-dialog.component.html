@@ -27,7 +27,7 @@
         </mat-form-field>
         <br />
         <mat-form-field>
-          <textarea matInput placeholder="概要" formControlName="meetingAgenda" required></textarea>
+          <textarea matInput placeholder="概要" formControlName="meetingDescription" required></textarea>
         </mat-form-field>
         <br />
         <mat-form-field>
@@ -94,7 +94,7 @@
         <button mat-button mat-dialog-close>キャンセル</button>
         <button mat-button matStepperPrevious>戻る</button>
         <button mat-button (click)="stepper.reset()">リセット</button>
-        <button mat-button [disable]="!stepper.valid" (click)="onNoClick()">登録</button>
+        <button mat-button [disable]="!stepper.valid" (click)="register()">登録</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

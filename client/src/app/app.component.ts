@@ -45,20 +45,31 @@ export class AppComponent implements OnInit {
   }
 
   public openDialog(): void {
-    const dialogRef = this.dialog.open(AddMeetingDialogComponent, {
-      data: {},
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      this.meetingService.create(result).subscribe(res => {
-        console.log(res);
-        location.reload();
-      }, error => {
-        console.log(error);
+    this.userService.getByMe().subscribe(user => {
+      localStorage.setItem('userId', user['id']);
+      localStorage.setItem('userName', user['name']);
+      localStorage.setItem('userAddress', user['email']);
+      console.log(user);
+      this.userName = user['name'];
+      const dialogRef = this.dialog.open(AddMeetingDialogComponent, {
+        data: {},
+        disableClose: true
       });
-    });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(result);
+        this.meetingService.create(result).subscribe(res => {
+          console.log(res);
+          location.reload();
+        }, error => {
+          console.log(error);
+        });
+      });
+    },
+      error => {
+        console.log(error);
+        this.login();
+      });
   }
 
   public login(): void {

@@ -9,8 +9,8 @@ import lombok.Data;
 @Component
 public class System {
 
-    // TODO: 適切な取得方法は？
-    private String version = "V1.0.0";
+    @Value("${application.version}")
+    private String version;
 
     @Value("${application.name}")
     private String applicationName;

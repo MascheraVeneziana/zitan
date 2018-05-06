@@ -10,15 +10,17 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/ap1/v1/provider/google/meeting/openable")
+@RestController
+@RequestMapping("/ap1/v1/provider/google/meeting/openable")
 public class GoogleMeetingGroupController {
 
     @Autowired
     ProviderCalendarService calendarService;
 
-    @PostMapping()
+    @PostMapping
     public ProviderMeetingGroup status(OAuth2AuthenticationToken authentication, @RequestBody ProviderMeetingGroup group) {
         ProviderMeetingGroup resultGroup = calendarService.getStatus(authentication, group);
         return resultGroup;

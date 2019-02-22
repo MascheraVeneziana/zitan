@@ -1,7 +1,6 @@
-.settings/
-db/
-src/main/resources/application-develop.properties
-src/main/resources/application.properties
-target/
 .classpath
 .project
+.settings/
+db/
+src/main/resources/application-*.properties
+target/
